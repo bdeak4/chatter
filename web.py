@@ -1,16 +1,19 @@
+#!venv/bin/python
+
 from bottle import route, run, template
 
 from data import fetch_data_in_background
+from stats import *
 
 
 @route("/")
 def index():
-    return template("idx")
-
-
-@route("/data")
-def data():
-    return template("data")
+    return "chatter"
+    # return template(
+    #    "index.html",
+    #    top_week_growth=get_top_week_growth(),
+    #    processed_today_count=get_processed_today_count(),
+    # )
 
 
 fetch_data_in_background()

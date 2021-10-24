@@ -1,0 +1,56 @@
+<pre>
+</pre>
+
+<center><h1>chatter</h1></center>
+<hr>
+<div id="chart1"></div>
+<hr>
+<center>{{processed_today_count}} processed tickers today</center>
+<script src="https://unpkg.com/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script>
+<script>
+new frappe.Chart("#chart1", {
+    title: "Top growth over last week",
+    data: {
+        labels: [...Array(7)].map((_, i) => {
+            const d = new Date()
+            d.setDate(d.getDate() - i)
+            return d.toISOString().substring(0, 10)
+        }).reverse(),
+        datasets: [
+            %for t in top_week_growth:
+            {
+                name: '{{t["ticker"]}}',
+                values: [
+                    %for point in t["points"]:
+                        {{point}},
+                    %end
+                ]
+            },
+            %end
+        ]
+    },
+    type: 'line',
+    lineOptions: {
+        regionFill: 1
+    },
+    tooltipOptions: {
+        formatTooltipY: d => d + '%'
+    }
+})
+//new frappe.Chart("#chart2", {
+//    title: "Most talked about ticker details",
+//    data: {
+//        labels: ["Positive", "Neutral", "Negative"],
+//        datasets: [
+//            {
+//                name: "ADA",
+//                values: [60, 10, 30]
+//            }
+//        ]
+//    },
+//    type: 'donut',
+//    tooltipOptions: {
+//        formatTooltipY: d => d + '%'
+//    }
+//})
+</script>
