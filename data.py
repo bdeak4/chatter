@@ -21,12 +21,16 @@ def fetch_reddit_submissions():
     reddit_subs = reddit.subreddit(multireddit)
     cur = con.cursor()
     te = TickerExtractor()
-    for submission in reddit_subs.stream.submissions(skip_existing=True):
-        text = submission.title + "\n" + submission.selftext
-        polarity, subjectivity = text_sentiment(text)
-        sub = submission.subreddit
-        for ticker in te.extract(text):
-            save_ticker(cur, ticker, sub, polarity, subjectivity, "post")
+    try:
+        for submission in reddit_subs.stream.submissions(skip_existing=True):
+            text = submission.title + "\n" + submission.selftext
+            polarity, subjectivity = text_sentiment(text)
+            sub = submission.subreddit
+            for ticker in te.extract(text):
+                save_ticker(cur, ticker, sub, polarity, subjectivity, "post")
+    except:
+        time.sleep(60)
+        fetch_reddit_submissions()
 
 
 def fetch_reddit_comments():
@@ -38,12 +42,16 @@ def fetch_reddit_comments():
     reddit_subs = reddit.subreddit(multireddit)
     cur = con.cursor()
     te = TickerExtractor()
-    for comment in reddit_subs.stream.comments(skip_existing=True):
-        text = comment.body
-        polarity, subjectivity = text_sentiment(text)
-        sub = comment.subreddit
-        for ticker in te.extract(text):
-            save_ticker(cur, ticker, sub, polarity, subjectivity, "comment")
+    try:
+        for comment in reddit_subs.stream.comments(skip_existing=True):
+            text = comment.body
+            polarity, subjectivity = text_sentiment(text)
+            sub = comment.subreddit
+            for ticker in te.extract(text):
+                save_ticker(cur, ticker, sub, polarity, subjectivity, "comment")
+    except:
+        time.sleep(60)
+        fetch_reddit_comments()
 
 
 def save_ticker(cur, ticker, sub, polarity, subjectivity, source):
@@ -61,7 +69,6 @@ def save_ticker(cur, ticker, sub, polarity, subjectivity, source):
         (ticker, type_, date, polarity, subjectivity, source),
     )
     con.commit()
-    print([date, type_, ticker, polarity, subjectivity])
 
 
 def sub_type(sub):
@@ -96,7 +103,7 @@ def fetch_data_in_background():
             count INTEGER,
             UNIQUE(ticker, type, date, polarity, subjectivity, source)
         );
-    """
+        """
     )
     con.commit()
 
