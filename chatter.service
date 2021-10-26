@@ -5,8 +5,8 @@ Description=chatter
 Type=simple
 Restart=always
 RestartSec=5s
-WorkingDirectory=/home/bdeak/chatter
-ExecStart=/home/bdeak/chatter/web.py
+WorkingDirectory=/root/chatter
+ExecStart=/root/chatter/web.py
 
 [Install]
 WantedBy=multi-user.target
