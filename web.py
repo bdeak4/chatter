@@ -17,4 +17,4 @@ def index():
 
 
 fetch_data_in_background()
-run(host="localhost", port=8080)
+run(host="localhost", port=8080, server="waitress")
