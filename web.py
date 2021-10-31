@@ -1,19 +1,24 @@
 #!venv/bin/python
 
 from bottle import route, run, template
+import sqlite3
+import pathlib
 
 from data import fetch_data_in_background
-from stats import *
+
+con = sqlite3.connect("data.db", check_same_thread=False)
+cur = con.cursor()
 
 
 @route("/")
 def index():
-    return "chatter"
-    # return template(
-    #    "index.html",
-    #    top_week_growth=get_top_week_growth(),
-    #    processed_today_count=get_processed_today_count(),
-    # )
+    processed_today_count = cur.execute(
+        pathlib.Path("queries/processed_today.sql").read_text()
+    ).fetchone()[0]
+    return template(
+        "index.html",
+        processed_today_count=processed_today_count,
+    )
 
 
 fetch_data_in_background()

@@ -32,7 +32,7 @@ FROM (
 				END AS count
 			FROM tickers
 		)
-		WHERE date >= DATE("now", "-7 days") AND type = 'crypto'
+		WHERE date >= DATE("now", "-7 days") AND type = ?
 		GROUP BY date, ticker
 		ORDER BY ticker, date
 	)
@@ -48,7 +48,7 @@ FROM (
 		SUM(CASE source WHEN "post" THEN count ELSE 0 END) AS source_post_count,
 		SUM(CASE source WHEN "comment" THEN count ELSE 0 END) AS source_comment_count
 	FROM tickers
-	WHERE date >= DATE("now", "-7 days") AND type = 'crypto'
+	WHERE date >= DATE("now", "-7 days") AND type = ?
 	GROUP BY ticker
 ) AS data ON rising.ticker = data.ticker
 ORDER BY score DESC
