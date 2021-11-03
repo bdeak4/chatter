@@ -2,12 +2,12 @@ SELECT data.*, percent_change_by_day,
 	(percent_change_week / MAX(percent_change_week) OVER()) +
 	(1.0 * sum_week / MAX(sum_week) OVER()) AS score
 FROM (
-	SELECT ticker,
+	SELECT ticker, type,
 		SUM(percent_change_day) AS percent_change_week,
 		SUM(sum_day) AS sum_week,
 		GROUP_CONCAT(CAST(percent_change_day AS INT)) AS percent_change_by_day
 	FROM (
-		SELECT ticker,
+		SELECT ticker, type,
 			CASE LAG(ticker, 1) OVER (ORDER BY ticker, date)
 				WHEN ticker THEN (
 					100.0 * (SUM(count) -
@@ -39,7 +39,7 @@ FROM (
 	WHERE sum_day > avg_sum_day
 	GROUP BY ticker
 ) AS rising INNER JOIN (
-	SELECT ticker,
+	SELECT ticker, type,
 		SUM(CASE polarity WHEN 1 THEN count ELSE 0 END) AS polarity_positive_count,
 		SUM(CASE polarity WHEN 0 THEN count ELSE 0 END) AS polarity_neutral_count,
 		SUM(CASE polarity WHEN -1 THEN count ELSE 0 END) AS polarity_negative_count,
@@ -48,8 +48,8 @@ FROM (
 		SUM(CASE source WHEN "post" THEN count ELSE 0 END) AS source_post_count,
 		SUM(CASE source WHEN "comment" THEN count ELSE 0 END) AS source_comment_count
 	FROM tickers
-	WHERE date >= DATE("now", "-7 days") AND type = ?
+	WHERE date >= DATE("now", "-7 days")
 	GROUP BY ticker
-) AS data ON rising.ticker = data.ticker
+) AS data ON rising.ticker = data.ticker AND rising.type = data.type
 ORDER BY score DESC
-LIMIT 15;
+LIMIT 20;

@@ -1,56 +1,138 @@
-<pre>
-</pre>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>chatter</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<style>
+		body { font-family: monospace }
+		header, footer { text-align: center }
+		table { width: 100%; white-space: nowrap }
+		td { padding-right: 20px }
+		a { color: blue }
+		tr:hover { background-color: #eee }
+	</style>
+</head>
+<body>
+	<header>
+		<h1>chatter</h1>
+	</header>
+	<hr>
+	<h2>crypto</h2>
+	<table>
+		<tr style="text-align: left">
+			<th>ticker</th>
+			<th>polarity</th>
+			<th>subjectivity</th>
+			<th>source</th>
+			<th>change by day</th>
+			<th>count</th>
+			<th>score</th>
+		</tr>
+		%for ticker in crypto_rising_this_week:
+		<tr>
+			<td>
+				%if ticker["link"] != "":
+				<a href="{{!ticker['link']}}" target="_blank">
+					{{ticker["name"]}}
+				</a>
+				%else:
+				{{ticker["name"]}}
+				%end
+			</td>
+			<td>
+				<span style="color: green">
+					{{!ticker["polarity_positive_count"]}}
+				</span>
+				positive,
+				{{!ticker["polarity_neutral_count"]}} neutral,
+				<span style="color: red">
+					{{!ticker["polarity_negative_count"]}}
+				</span>
+				negative
+			</td>
+			<td>
+				<span style="color: green">
+					{{!ticker["subjectivity_objective_count"]}}
+				</span>
+				objective,
+				<span style="color: red">
+					{{!ticker["subjectivity_subjective_count"]}}
+				</span>
+				subjective
+			</td>
+			<td>
+				{{!ticker["source_post_count"]}} posts,
+				{{!ticker["source_comment_count"]}} comments
+			</td>
+			<td>{{!ticker["change_by_day"]}}</td>
+			<td>{{ticker["count"]}}</td>
+			<td>{{ticker["source"]}}</td>
+		</tr>
+		%end
+	</table>
+	<h2>stocks</h2>
+	<table>
+		<tr style="text-align: left">
+			<th>ticker</th>
+			<th>polarity</th>
+			<th>subjectivity</th>
+			<th>source</th>
+			<th>change by day</th>
+			<th>count</th>
+			<th>score</th>
+		</tr>
+		%for ticker in stocks_rising_this_week:
+		<tr>
+			<td>
+				%if ticker["link"] != "":
+				<a href="{{!ticker['link']}}" target="_blank">
+					{{ticker["name"]}}
+				</a>
+				%else:
+				{{ticker["name"]}}
+				%end
+			</td>
+			<td>
+				<span style="color: green">
+					{{!ticker["polarity_positive_count"]}}
+				</span>
+				positive,
+				{{!ticker["polarity_neutral_count"]}} neutral,
+				<span style="color: red">
+					{{!ticker["polarity_negative_count"]}}
+				</span>
+				negative
+			</td>
+			<td>
+				<span style="color: green">
+					{{!ticker["subjectivity_objective_count"]}}
+				</span>
+				objective,
+				<span style="color: red">
+					{{!ticker["subjectivity_subjective_count"]}}
+				</span>
+				subjective
+			</td>
+			<td>
+				{{!ticker["source_post_count"]}} posts,
+				{{!ticker["source_comment_count"]}} comments
+			</td>
+			<td>{{!ticker["change_by_day"]}}</td>
+			<td>{{ticker["count"]}}</td>
+			<td>{{ticker["source"]}}</td>
+		</tr>
+		%end
+	</table>
+	<hr style="margin-top: 16px">
+	<footer style="margin: 16px 0">
+		<span style="white-space: nowrap">
+		{{processed_today_count}} processed tickers today |
+		</span>
+		<span style="white-space: nowrap">
+		&copy; 2021 <a href="https://bdeak.net">Bartol Deak</a>
+		</span>
+	</footer>
+</body>
+</html>
 
-<center><h1>chatter</h1></center>
-<hr>
-<div id="chart1"></div>
-<hr>
-<center>{{processed_today_count}} processed tickers today</center>
-<script src="https://unpkg.com/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script>
-<script>
-new frappe.Chart("#chart1", {
-    title: "Top growth over last week",
-    data: {
-        labels: [...Array(7)].map((_, i) => {
-            const d = new Date()
-            d.setDate(d.getDate() - i)
-            return d.toISOString().substring(0, 10)
-        }).reverse(),
-        datasets: [
-            %for t in top_week_growth:
-            {
-                name: '{{t["ticker"]}}',
-                values: [
-                    %for point in t["points"]:
-                        {{point}},
-                    %end
-                ]
-            },
-            %end
-        ]
-    },
-    type: 'line',
-    lineOptions: {
-        regionFill: 1
-    },
-    tooltipOptions: {
-        formatTooltipY: d => d + '%'
-    }
-})
-//new frappe.Chart("#chart2", {
-//    title: "Most talked about ticker details",
-//    data: {
-//        labels: ["Positive", "Neutral", "Negative"],
-//        datasets: [
-//            {
-//                name: "ADA",
-//                values: [60, 10, 30]
-//            }
-//        ]
-//    },
-//    type: 'donut',
-//    tooltipOptions: {
-//        formatTooltipY: d => d + '%'
-//    }
-//})
-</script>

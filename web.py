@@ -3,6 +3,8 @@
 from bottle import route, run, template
 import sqlite3
 import pathlib
+import datetime
+import requests
 
 from data import fetch_data_in_background
 
@@ -12,13 +14,104 @@ cur = con.cursor()
 
 @route("/")
 def index():
+    crypto_rising_this_week = []
+    for ticker in cur.execute(
+        pathlib.Path("queries/rising_this_week.sql").read_text(), ("crypto",)
+    ).fetchall():
+        count = ticker[7] + ticker[8]
+        crypto_rising_this_week = crypto_rising_this_week + [
+            {
+                "name": ticker[0],
+                "link": get_link(ticker[0], ticker[1]),
+                "polarity_positive_count": get_percent(ticker[2], count),
+                "polarity_neutral_count": get_percent(ticker[3], count),
+                "polarity_negative_count": get_percent(ticker[4], count),
+                "subjectivity_subjective_count": get_percent(ticker[5], count),
+                "subjectivity_objective_count": get_percent(ticker[6], count),
+                "source_post_count": get_percent(ticker[7], count),
+                "source_comment_count": get_percent(ticker[8], count),
+                "count": count,
+                "source": str(round(ticker[10], 10)).ljust(12, "0"),
+                "change_by_day": " ".join(
+                    map(
+                        lambda n: '<span style="color: %s">%s%%</span>'
+                        % ("green" if int(n) > 0 else "red", n),
+                        ticker[9].split(","),
+                    )
+                ),
+            }
+        ]
+
+    stocks_rising_this_week = []
+    for ticker in cur.execute(
+        pathlib.Path("queries/rising_this_week.sql").read_text(), ("stock",)
+    ).fetchall():
+        count = ticker[7] + ticker[8]
+        stocks_rising_this_week = stocks_rising_this_week + [
+            {
+                "name": ticker[0],
+                "link": get_link(ticker[0], ticker[1]),
+                "polarity_positive_count": get_percent(ticker[2], count),
+                "polarity_neutral_count": get_percent(ticker[3], count),
+                "polarity_negative_count": get_percent(ticker[4], count),
+                "subjectivity_subjective_count": get_percent(ticker[5], count),
+                "subjectivity_objective_count": get_percent(ticker[6], count),
+                "source_post_count": get_percent(ticker[7], count),
+                "source_comment_count": get_percent(ticker[8], count),
+                "count": count,
+                "source": str(round(ticker[10], 10)).ljust(12, "0"),
+                "change_by_day": " ".join(
+                    map(
+                        lambda n: '<span style="color: %s">%s%%</span>'
+                        % ("green" if int(n) > 0 else "red", n),
+                        ticker[9].split(","),
+                    )
+                ),
+            }
+        ]
+
     processed_today_count = cur.execute(
         pathlib.Path("queries/processed_today.sql").read_text()
     ).fetchone()[0]
+
     return template(
         "index.html",
         processed_today_count=processed_today_count,
+        crypto_rising_this_week=crypto_rising_this_week,
+        stocks_rising_this_week=stocks_rising_this_week,
     )
+
+
+def get_percent(a, b):
+    s = str(round(a / b * 100))
+    padding = (2 - len(s)) * "&nbsp;"
+    return padding + s + "%"
+
+
+crypto_links = {}
+crypto_links_last_modified = 0
+
+
+def get_link(ticker, type_):
+    if type_ == "crypto":
+        global crypto_links_last_modified
+        today = datetime.datetime.now().day
+        if crypto_links_last_modified != today:
+            try:
+                r = requests.get("https://api.coingecko.com/api/v3/search")
+                crypto_links.clear()
+                for coin in r.json()["coins"]:
+                    crypto_links[coin["symbol"]] = coin["id"]
+                crypto_links_last_modified = today
+            except:
+                pass
+        if ticker in crypto_links:
+            return (
+                "https://www.coingecko.com/en/coins/%s" % crypto_links[ticker]
+            )
+    if type_ == "stock":
+        return "https://finviz.com/quote.ashx?t=%s" % ticker
+    return ""
 
 
 fetch_data_in_background()
