@@ -52,4 +52,4 @@ FROM (
 	GROUP BY ticker
 ) AS data ON rising.ticker = data.ticker AND rising.type = data.type
 ORDER BY score DESC
-LIMIT 20;
+LIMIT 25;

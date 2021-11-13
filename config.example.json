@@ -6,13 +6,7 @@
   },
   "subs": {
     "crypto": [
-      "CryptoCurrency",
-      "altcoin",
-      "Bitcoin",
-      "btc",
-      "BitcoinMarkets",
-      "ethereum",
-      "CryptoMarkets"
+      "CryptoCurrency"
     ],
     "stock": [
       "wallstreetbets",

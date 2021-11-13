@@ -101,7 +101,7 @@ def get_link(ticker, type_):
                 r = requests.get("https://api.coingecko.com/api/v3/search")
                 crypto_links.clear()
                 for coin in r.json()["coins"]:
-                    if ticker not in crypto_links:
+                    if coin["symbol"] not in crypto_links:
                         crypto_links[coin["symbol"]] = coin["id"]
                 crypto_links_last_modified = today
             except:
