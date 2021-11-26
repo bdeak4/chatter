@@ -2,6 +2,7 @@ import multiprocessing
 import time
 import sqlite3
 import json
+import logging
 
 from praw import Reddit
 from reticker import TickerExtractor
@@ -28,7 +29,8 @@ def fetch_reddit_submissions():
             sub = submission.subreddit
             for ticker in te.extract(text):
                 save_ticker(cur, ticker, sub, polarity, subjectivity, "post")
-    except:
+    except Exception as e:
+        logging.exception(e)
         time.sleep(60)
         fetch_reddit_submissions()
 
@@ -49,7 +51,8 @@ def fetch_reddit_comments():
             sub = comment.subreddit
             for ticker in te.extract(text):
                 save_ticker(cur, ticker, sub, polarity, subjectivity, "comment")
-    except:
+    except Exception as e:
+        logging.exception(e)
         time.sleep(60)
         fetch_reddit_comments()
 
