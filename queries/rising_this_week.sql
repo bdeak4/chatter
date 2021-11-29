@@ -36,9 +36,10 @@ FROM (
 		GROUP BY date, ticker
 		ORDER BY ticker, date
 	)
-	WHERE sum_day > avg_sum_day
+	WHERE sum_day > avg_sum_day AND percent_change_day != ""
 	GROUP BY ticker
-) AS rising INNER JOIN (
+) AS rising
+INNER JOIN (
 	SELECT ticker, type,
 		SUM(CASE polarity WHEN 1 THEN count ELSE 0 END) AS polarity_positive_count,
 		SUM(CASE polarity WHEN 0 THEN count ELSE 0 END) AS polarity_neutral_count,
@@ -50,6 +51,7 @@ FROM (
 	FROM tickers
 	WHERE date >= DATE("now", "-7 days")
 	GROUP BY ticker
-) AS data ON rising.ticker = data.ticker AND rising.type = data.type
+) AS data
+ON rising.ticker = data.ticker AND rising.type = data.type
 ORDER BY score DESC
 LIMIT 25;
