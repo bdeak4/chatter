@@ -1,3 +1,1 @@
-removing non-existing tokens mechanism
 zadnji red sa market overall stats for polarity, subjectivity, source, change by day and count
-change by day stavit kao tablicu po danima

@@ -1,20 +1,26 @@
-SELECT data.*, percent_change_by_day,
+SELECT data.*, percent_change_by_day, days_with_change,
 	(percent_change_week / MAX(percent_change_week) OVER()) +
 	(1.0 * sum_week / MAX(sum_week) OVER()) AS score
 FROM (
 	SELECT ticker, type,
 		SUM(percent_change_day) AS percent_change_week,
 		SUM(sum_day) AS sum_week,
-		GROUP_CONCAT(CAST(percent_change_day AS INT)) AS percent_change_by_day
+		GROUP_CONCAT(percent_change_day) AS percent_change_by_day,
+		GROUP_CONCAT(day_with_change) AS days_with_change
 	FROM (
 		SELECT ticker, type,
 			CASE LAG(ticker, 1) OVER (ORDER BY ticker, date)
-				WHEN ticker THEN (
+				WHEN ticker THEN CAST(
 					100.0 * (SUM(count) -
 					LAG(SUM(count), 1) OVER (ORDER BY ticker, date)) /
 					LAG(SUM(count), 1) OVER (ORDER BY ticker, date)
-				)
+				AS INT)
 			END AS percent_change_day,
+			CASE LAG(ticker, 1) OVER (ORDER BY ticker, date)
+				WHEN ticker THEN CAST(
+					JULIANDAY(DATE()) - JULIANDAY(date)
+				AS INT)
+			END AS day_with_change,
 			SUM(count) AS sum_day,
 			(
 				SELECT AVG(sum_day)
