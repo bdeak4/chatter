@@ -2,6 +2,16 @@
 
 from bottle import route, run, template
 import sqlite3
+import json
+import multiprocessing
+import logging
+import time
+import re
+import praw
+import textblob
+import reticker
+
+config = json.loads(open("chatter.json").read())
 
 con = sqlite3.connect("chatter.db")
 
@@ -65,7 +75,61 @@ con.commit()
 # ------------------------------------------------------------------------------
 
 
-print("hi")
+symbol_regex = re.compile(r"\b[A-Z]{1,6}\b")
+multireddit = "+".join(sum(list(config["subreddits"].values()), []))
+
+
+def ingest_submissions():
+    try:
+        reddit = praw.Reddit(
+            client_id=config["secrets"]["client_id"],
+            client_secret=config["secrets"]["client_secret"],
+            user_agent="chatter_submissions",
+        ).subreddit(multireddit)
+
+        for submission in reddit.stream.submissions(skip_existing=True):
+            text = submission.title + "\n" + submission.selftext
+            ingest(text, "submission", asset_class(submission.subreddit))
+
+    except Exception as e:
+        logging.exception(e)
+        time.sleep(60)
+        ingest_submissions()
+
+
+def ingest_comments():
+    try:
+        reddit = praw.Reddit(
+            client_id=config["secrets"]["client_id"],
+            client_secret=config["secrets"]["client_secret"],
+            user_agent="chatter_comments",
+        ).subreddit(multireddit)
+
+        for comment in reddit.stream.comments(skip_existing=True):
+            ingest(comment.body, "comment", asset_class(comment.subreddit))
+
+    except Exception as e:
+        logging.exception(e)
+        time.sleep(60)
+        ingest_comments()
+
+
+def ingest(text, source, asset_class):
+    tb = textblob.TextBlob(text)
+    symbols = symbol_regex.findall(text)
+    print(text)
+    print(symbols)
+    print(asset_class)
+    print(round(tb.sentiment.polarity), round(tb.sentiment.subjectivity))
+
+
+def asset_class(subreddit):
+    for ac, subreddits in config["subreddits"].items():
+        if str(subreddit).lower() in subreddits:
+            return ac
+
+
+ingest_comments()
 
 
 # routes
