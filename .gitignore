@@ -1,6 +1,6 @@
 __pycache__
 venv
-chatter.db
-data.db
 *.pyc
-config.json
+
+chatter.db
+secrets.json

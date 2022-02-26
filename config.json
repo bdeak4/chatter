@@ -1,0 +1,15 @@
+{
+  "subs": ["cryptocurrency"],
+  "symbol_blocklist": [
+    "HODL",
+    "DYOR",
+    "ATH",
+    "SHILL",
+    "NFT",
+    "IMO",
+    "WTF",
+    "A",
+    "X",
+    "OK"
+  ]
+}
