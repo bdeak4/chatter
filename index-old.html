@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>chatter</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<style>
+		body { font-family: monospace }
+		header, footer { text-align: center }
+		table { width: 100%; white-space: nowrap }
+		td { padding-right: 20px }
+		a { color: blue }
+		tr:hover { background-color: #eee }
+	</style>
+</head>
+<body>
+	<header>
+		<h1>chatter</h1>
+	</header>
+	<hr>
+	<h2>crypto</h2>
+	<table>
+		<tr style="text-align: left">
+			<th>ticker</th>
+			<th>polarity</th>
+			<th>subjectivity</th>
+			<th>source</th>
+			<th>{{!weekdays}}</th>
+			<th>count</th>
+			<th>score</th>
+		</tr>
+		%for ticker in crypto_rising_this_week:
+		<tr>
+			<td>
+				%if ticker["link"] != "":
+				<a href="{{!ticker['link']}}" target="_blank">
+					{{ticker["name"]}}
+				</a>
+				%else:
+				{{ticker["name"]}}
+				%end
+			</td>
+			<td>
+				<span style="color: green">
+					{{!ticker["polarity_positive_count"]}}
+				</span>
+				positive,
+				{{!ticker["polarity_neutral_count"]}} neutral,
+				<span style="color: red">
+					{{!ticker["polarity_negative_count"]}}
+				</span>
+				negative
+			</td>
+			<td>
+				<span style="color: green">
+					{{!ticker["subjectivity_objective_count"]}}
+				</span>
+				objective,
+				<span style="color: red">
+					{{!ticker["subjectivity_subjective_count"]}}
+				</span>
+				subjective
+			</td>
+			<td>
+				{{!ticker["source_post_count"]}} posts,
+				{{!ticker["source_comment_count"]}} comments
+			</td>
+			<td>{{!ticker["change_by_day"]}}</td>
+			<td>{{ticker["count"]}}</td>
+			<td>{{ticker["score"]}}</td>
+		</tr>
+		%end
+	</table>
+	<h2>stocks</h2>
+	<table>
+		<tr style="text-align: left">
+			<th>ticker</th>
+			<th>polarity</th>
+			<th>subjectivity</th>
+			<th>source</th>
+			<th>{{!weekdays}}</th>
+			<th>count</th>
+			<th>score</th>
+		</tr>
+		%for ticker in stocks_rising_this_week:
+		<tr>
+			<td>
+				%if ticker["link"] != "":
+				<a href="{{!ticker['link']}}" target="_blank">
+					{{ticker["name"]}}
+				</a>
+				%else:
+				{{ticker["name"]}}
+				%end
+			</td>
+			<td>
+				<span style="color: green">
+					{{!ticker["polarity_positive_count"]}}
+				</span>
+				positive,
+				{{!ticker["polarity_neutral_count"]}} neutral,
+				<span style="color: red">
+					{{!ticker["polarity_negative_count"]}}
+				</span>
+				negative
+			</td>
+			<td>
+				<span style="color: green">
+					{{!ticker["subjectivity_objective_count"]}}
+				</span>
+				objective,
+				<span style="color: red">
+					{{!ticker["subjectivity_subjective_count"]}}
+				</span>
+				subjective
+			</td>
+			<td>
+				{{!ticker["source_post_count"]}} posts,
+				{{!ticker["source_comment_count"]}} comments
+			</td>
+			<td>{{!ticker["change_by_day"]}}</td>
+			<td>{{ticker["count"]}}</td>
+			<td>{{ticker["score"]}}</td>
+		</tr>
+		%end
+	</table>
+	<hr style="margin-top: 16px">
+	<footer style="margin: 16px 0">
+		<span style="white-space: nowrap">
+		{{processed_today_count}} tickers processed today |
+		</span>
+		<span style="white-space: nowrap">
+		&copy; 2021 <a href="https://bdeak.net">Bartol Deak</a>
+		</span>
+	</footer>
+</body>
+</html>
+

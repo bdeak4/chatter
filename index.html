@@ -1,138 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>chatter</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<style>
-		body { font-family: monospace }
-		header, footer { text-align: center }
-		table { width: 100%; white-space: nowrap }
-		td { padding-right: 20px }
-		a { color: blue }
-		tr:hover { background-color: #eee }
-	</style>
-</head>
-<body>
-	<header>
-		<h1>chatter</h1>
-	</header>
-	<hr>
-	<h2>crypto</h2>
-	<table>
-		<tr style="text-align: left">
-			<th>ticker</th>
-			<th>polarity</th>
-			<th>subjectivity</th>
-			<th>source</th>
-			<th>{{!weekdays}}</th>
-			<th>count</th>
-			<th>score</th>
-		</tr>
-		%for ticker in crypto_rising_this_week:
-		<tr>
-			<td>
-				%if ticker["link"] != "":
-				<a href="{{!ticker['link']}}" target="_blank">
-					{{ticker["name"]}}
-				</a>
-				%else:
-				{{ticker["name"]}}
-				%end
-			</td>
-			<td>
-				<span style="color: green">
-					{{!ticker["polarity_positive_count"]}}
-				</span>
-				positive,
-				{{!ticker["polarity_neutral_count"]}} neutral,
-				<span style="color: red">
-					{{!ticker["polarity_negative_count"]}}
-				</span>
-				negative
-			</td>
-			<td>
-				<span style="color: green">
-					{{!ticker["subjectivity_objective_count"]}}
-				</span>
-				objective,
-				<span style="color: red">
-					{{!ticker["subjectivity_subjective_count"]}}
-				</span>
-				subjective
-			</td>
-			<td>
-				{{!ticker["source_post_count"]}} posts,
-				{{!ticker["source_comment_count"]}} comments
-			</td>
-			<td>{{!ticker["change_by_day"]}}</td>
-			<td>{{ticker["count"]}}</td>
-			<td>{{ticker["score"]}}</td>
-		</tr>
-		%end
-	</table>
-	<h2>stocks</h2>
-	<table>
-		<tr style="text-align: left">
-			<th>ticker</th>
-			<th>polarity</th>
-			<th>subjectivity</th>
-			<th>source</th>
-			<th>{{!weekdays}}</th>
-			<th>count</th>
-			<th>score</th>
-		</tr>
-		%for ticker in stocks_rising_this_week:
-		<tr>
-			<td>
-				%if ticker["link"] != "":
-				<a href="{{!ticker['link']}}" target="_blank">
-					{{ticker["name"]}}
-				</a>
-				%else:
-				{{ticker["name"]}}
-				%end
-			</td>
-			<td>
-				<span style="color: green">
-					{{!ticker["polarity_positive_count"]}}
-				</span>
-				positive,
-				{{!ticker["polarity_neutral_count"]}} neutral,
-				<span style="color: red">
-					{{!ticker["polarity_negative_count"]}}
-				</span>
-				negative
-			</td>
-			<td>
-				<span style="color: green">
-					{{!ticker["subjectivity_objective_count"]}}
-				</span>
-				objective,
-				<span style="color: red">
-					{{!ticker["subjectivity_subjective_count"]}}
-				</span>
-				subjective
-			</td>
-			<td>
-				{{!ticker["source_post_count"]}} posts,
-				{{!ticker["source_comment_count"]}} comments
-			</td>
-			<td>{{!ticker["change_by_day"]}}</td>
-			<td>{{ticker["count"]}}</td>
-			<td>{{ticker["score"]}}</td>
-		</tr>
-		%end
-	</table>
-	<hr style="margin-top: 16px">
-	<footer style="margin: 16px 0">
-		<span style="white-space: nowrap">
-		{{processed_today_count}} tickers processed today |
-		</span>
-		<span style="white-space: nowrap">
-		&copy; 2021 <a href="https://bdeak.net">Bartol Deak</a>
-		</span>
-	</footer>
-</body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chatter</title>
 
+    <link
+      rel="stylesheet"
+      href="https://cdn.skypack.dev/chartist/dist/chartist.min.css"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header class="container">
+      <h1>chatter</h1>
+      <hr />
+    </header>
+
+    <main class="container">
+      <h2>past week</h2>
+      <table class="coin-table">
+        <tr>
+          <th>symbol</th>
+          <th>polarity</th>
+          <th>subjectivity</th>
+          <th>content type</th>
+          <th>mentions</th>
+          <th>price</th>
+        </tr>
+        <tr>
+          <td><a href="">BTC</a></td>
+          <td>
+            <div class="pie-chart" data-values="56,37" title="explain"></div>
+          </td>
+          <td>
+            <div
+              class="pie-chart pie-chart--tricolor"
+              data-values="40,0,20"
+              title="explain this"
+            ></div>
+          </td>
+          <td>
+            <div class="pie-chart" data-values="5,50" title="explain"></div>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><a href="">ETH</a></td>
+          <td>
+            <div
+              class="pie-chart"
+              data-values="88,12"
+              title="explain this"
+            ></div>
+          </td>
+          <td>
+            <div
+              class="pie-chart pie-chart--tricolor"
+              data-values="20,6,50"
+              title="explain this"
+            ></div>
+          </td>
+          <td>
+            <div
+              class="pie-chart"
+              data-values="1,40"
+              title="explain this"
+            ></div>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+
+      <div class="total">
+        <div>
+          <h2>total mentions</h2>
+          <a href="">week</a> <a href="">month</a> <a href="">quarter</a>
+          <div>graf...</div>
+        </div>
+        <div>
+          <h2>total market cap</h2>
+          <a href="">week</a> <a href="">month</a> <a href="">quarter</a>
+          <div>graf...</div>
+        </div>
+        <div>
+          <h2>btc price</h2>
+          <a href="">week</a> <a href="">month</a> <a href="">quarter</a>
+          <div>graf...</div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="container">
+      <hr />
+      821 posts and 3242341 comments analyzed in the past week
+      <span style="white-space: nowrap">
+        | &copy; 2021 <a href="https://bdeak.net">Bartol Deak</a>
+      </span>
+    </footer>
+
+    <script src="/static/index.js" type="module"></script>
+  </body>
+</html>

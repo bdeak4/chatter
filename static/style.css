@@ -1,0 +1,93 @@
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600;700&display=swap");
+
+:root {
+  --color-white: #fff;
+  --color-black: #000;
+  --color-bg-teal-50: rgb(240, 253, 250);
+  --color-bg-teal-100: rgb(204, 251, 241);
+  --color-bg-teal-200: rgb(153, 246, 228);
+  --color-bg-teal-300: rgb(94, 234, 212);
+  --color-bg-teal-400: rgb(45, 212, 191);
+  --color-bg-teal-500: rgb(20, 184, 166);
+  --color-bg-teal-600: rgb(13, 148, 136);
+  --color-bg-teal-700: rgb(15, 118, 110);
+  --color-bg-teal-800: rgb(17, 94, 89);
+  --color-bg-teal-900: rgb(19, 78, 74);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--color-white);
+  background-color: var(--color-black);
+  font-family: "Inconsolata", monospace;
+  font-size: 14px;
+}
+
+a {
+  color: var(--color-white);
+  text-decoration-color: var(--color-bg-teal-400);
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.hidden {
+  display: none;
+}
+
+hr {
+  border: 1px solid #ccc;
+}
+
+footer {
+  text-align: center;
+}
+
+.coin-table {
+  width: 100%;
+}
+
+.coin-table th {
+  text-align: left;
+}
+
+.pie-chart {
+  width: 32px;
+  height: 32px;
+}
+
+.ct-series-a .ct-slice-donut {
+  stroke: var(--color-bg-teal-500);
+}
+
+.ct-series-b .ct-slice-donut {
+  stroke: var(--color-bg-teal-700);
+}
+
+.pie-chart--tricolor .ct-series-b .ct-slice-donut {
+  stroke: var(--color-bg-teal-200);
+}
+
+.pie-chart--tricolor .ct-series-c .ct-slice-donut {
+  stroke: var(--color-bg-teal-700);
+}
+
+.total {
+  display: flex;
+}
+
+.total > * {
+  width: 33%;
+}
