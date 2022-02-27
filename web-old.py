@@ -6,8 +6,6 @@ import pathlib
 import datetime
 import requests
 
-from data import fetch_data_in_background
-
 con = sqlite3.connect("data.db", check_same_thread=False)
 cur = con.cursor()
 
@@ -105,13 +103,10 @@ def get_link(ticker, type_):
             except:
                 pass
         if ticker in crypto_links:
-            return (
-                "https://www.coingecko.com/en/coins/%s" % crypto_links[ticker]
-            )
+            return "https://www.coingecko.com/en/coins/%s" % crypto_links[ticker]
     if type_ == "stock":
         return "https://finviz.com/quote.ashx?t=%s" % ticker
     return ""
 
 
-fetch_data_in_background()
 run(host="0.0.0.0", port=8080, server="waitress")
