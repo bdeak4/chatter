@@ -2,17 +2,21 @@
 
 from bottle import route, run, template, static_file
 import sqlite3
+import datetime
 
-from ingestion import ingest_in_background
-
-
-con = sqlite3.connect("chatter.db")
-cur = con.cursor()
+import statistics
+import ingestion
 
 
 @route("/")
 def index():
-    return template("index.html")
+    with sqlite3.connect("chatter.db") as con:
+        return template(
+            "index.html",
+            total_mentions=statistics.total_mentions_by_time_period(con),
+            weekly_count=statistics.weekly_count_by_content_type(con),
+            current_year=datetime.date.today().year,
+        )
 
 
 @route("/static/<filepath:path>")
@@ -20,6 +24,6 @@ def static(filepath):
     return static_file(filepath, root="static")
 
 
-ingest_in_background()
+ingestion.ingest_in_background()
 
 run(host="0.0.0.0", port=8080, server="waitress")

@@ -26,6 +26,7 @@ body {
   background-color: var(--color-black);
   font-family: "Inconsolata", monospace;
   font-size: 14px;
+  line-height: 1.5;
 }
 
 a {
@@ -66,6 +67,7 @@ footer {
 .pie-chart {
   width: 32px;
   height: 32px;
+  margin-left: -4px;
 }
 
 .ct-series-a .ct-slice-donut {
@@ -84,10 +86,26 @@ footer {
   stroke: var(--color-bg-teal-700);
 }
 
+.ct-chart-line .ct-grid {
+  stroke: var(--color-bg-teal-900);
+}
+
+.ct-chart-line .ct-label {
+  color: var(--color-bg-teal-700);
+}
+
+.ct-series-a .ct-line {
+  stroke: var(--color-bg-teal-500);
+}
+
 .total {
   display: flex;
 }
 
 .total > * {
   width: 33%;
+}
+
+.total > *:not(:last-child) {
+  margin-right: 48px;
 }

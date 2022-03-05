@@ -75,30 +75,49 @@
         </tr>
       </table>
 
+      <h2>past month</h2>
+
       <div class="total">
         <div>
           <h2>total mentions</h2>
           <a href="">week</a> <a href="">month</a> <a href="">quarter</a>
-          <div>graf...</div>
+          <a href="">year</a>
+          <div
+            class="line-chart"
+            data-values="{{ ','.join(total_mentions['week']) }}"
+            title="explain"
+          ></div>
         </div>
         <div>
           <h2>total market cap</h2>
           <a href="">week</a> <a href="">month</a> <a href="">quarter</a>
-          <div>graf...</div>
+          <a href="">year</a>
+          <div
+            class="line-chart"
+            data-values="{{ ','.join(total_mentions['month']) }}"
+            title="explain"
+          ></div>
         </div>
         <div>
           <h2>btc price</h2>
           <a href="">week</a> <a href="">month</a> <a href="">quarter</a>
-          <div>graf...</div>
+          <a href="">year</a>
+          <div
+            class="line-chart"
+            data-values="{{ ','.join(total_mentions['quarter']) }}"
+            title="explain"
+          ></div>
         </div>
       </div>
     </main>
 
     <footer class="container">
       <hr />
-      821 posts and 3242341 comments analyzed in the past week
+      {{ weekly_count["submission"] }} posts and {{ weekly_count["comment"] }}
+      comments analyzed in the past week
       <span style="white-space: nowrap">
-        | &copy; 2021 <a href="https://bdeak.net">Bartol Deak</a>
+        | &copy; 2021-{{ current_year }}
+        <a href="https://bdeak.net">Bartol Deak</a>
       </span>
     </footer>
 

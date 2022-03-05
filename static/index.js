@@ -14,3 +14,26 @@ for (let el of document.querySelectorAll(".pie-chart")) {
     }
   );
 }
+
+for (let el of document.querySelectorAll(".line-chart")) {
+  const values = el.dataset.values.split(",").map((v) => parseInt(v));
+  console.log(values);
+
+  new Chartist.Line(
+    el,
+    {
+      series: [values],
+    },
+    {
+      fullWidth: true,
+      showPoint: false,
+      axisX: {
+        showLabel: false,
+        showGrid: false,
+      },
+      axisY: {
+        offset: 24,
+      },
+    }
+  );
+}
