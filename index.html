@@ -76,37 +76,57 @@
       </table>
 
       <h2>past month</h2>
+      ...
 
       <div class="total">
         <div>
           <h2>total mentions</h2>
-          <a href="">week</a> <a href="">month</a> <a href="">quarter</a>
-          <a href="">year</a>
+          <a href="" class="tab tab--active" data-set-tab="week">week</a>
+          <a href="" class="tab" data-set-tab="month">month</a>
+          <a href="" class="tab" data-set-tab="quarter">quarter</a>
+          <a href="" class="tab" data-set-tab="year">year</a>
           <div
-            class="line-chart"
+            class="line-chart line-chart--big"
             data-values="{{ ','.join(total_mentions['week']) }}"
-            title="explain"
+            data-tab="week"
+          ></div>
+          <div
+            class="line-chart line-chart--big hidden"
+            data-values="{{ ','.join(total_mentions['month']) }}"
+            data-tab="month"
+          ></div>
+          <div
+            class="line-chart line-chart--big hidden"
+            data-values="{{ ','.join(total_mentions['quarter']) }}"
+            data-tab="quarter"
+          ></div>
+          <div
+            class="line-chart line-chart--big hidden"
+            data-values="{{ ','.join(total_mentions['year']) }}"
+            data-tab="year"
           ></div>
         </div>
         <div>
           <h2>total market cap</h2>
-          <a href="">week</a> <a href="">month</a> <a href="">quarter</a>
-          <a href="">year</a>
-          <div
-            class="line-chart"
-            data-values="{{ ','.join(total_mentions['month']) }}"
-            title="explain"
-          ></div>
+          <a href="" class="tab tab--active" data-set-tab="week">week</a>
+          <a href="" class="tab" data-set-tab="month">month</a>
+          <a href="" class="tab" data-set-tab="quarter">quarter</a>
+          <a href="" class="tab" data-set-tab="year">year</a>
+          <div data-tab="week">chart week</div>
+          <div class="hidden" data-tab="month">chart month</div>
+          <div class="hidden" data-tab="quarter">chart quarter</div>
+          <div class="hidden" data-tab="year">chart year</div>
         </div>
         <div>
           <h2>btc price</h2>
-          <a href="">week</a> <a href="">month</a> <a href="">quarter</a>
-          <a href="">year</a>
-          <div
-            class="line-chart"
-            data-values="{{ ','.join(total_mentions['quarter']) }}"
-            title="explain"
-          ></div>
+          <a href="" class="tab tab--active" data-set-tab="week">week</a>
+          <a href="" class="tab" data-set-tab="month">month</a>
+          <a href="" class="tab" data-set-tab="quarter">quarter</a>
+          <a href="" class="tab" data-set-tab="year">year</a>
+          <div data-tab="week">chart week</div>
+          <div class="hidden" data-tab="month">chart month</div>
+          <div class="hidden" data-tab="quarter">chart quarter</div>
+          <div class="hidden" data-tab="year">chart year</div>
         </div>
       </div>
     </main>

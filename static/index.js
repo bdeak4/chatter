@@ -1,6 +1,6 @@
 import Chartist from "https://cdn.skypack.dev/chartist";
 
-for (let el of document.querySelectorAll(".pie-chart")) {
+document.querySelectorAll(".pie-chart").forEach((el) => {
   const values = el.dataset.values.split(",").map((v) => parseInt(v));
 
   new Chartist.Pie(
@@ -13,17 +13,14 @@ for (let el of document.querySelectorAll(".pie-chart")) {
       showLabel: false,
     }
   );
-}
+});
 
-for (let el of document.querySelectorAll(".line-chart")) {
+document.querySelectorAll(".line-chart").forEach((el) => {
   const values = el.dataset.values.split(",").map((v) => parseInt(v));
-  console.log(values);
 
   new Chartist.Line(
     el,
-    {
-      series: [values],
-    },
+    { series: [values] },
     {
       fullWidth: true,
       showPoint: false,
@@ -31,9 +28,34 @@ for (let el of document.querySelectorAll(".line-chart")) {
         showLabel: false,
         showGrid: false,
       },
-      axisY: {
-        offset: 24,
-      },
+      axisY: { offset: 24 },
     }
   );
-}
+});
+
+document.querySelectorAll("[data-set-tab]").forEach((el) => {
+  el.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    document
+      .querySelectorAll(".tab--active")
+      .forEach((el) => el.classList.remove("tab--active"));
+
+    document
+      .querySelectorAll(`[data-set-tab="${el.dataset.setTab}"]`)
+      .forEach((el) => el.classList.add("tab--active"));
+
+    document
+      .querySelectorAll("[data-tab]:not(.hidden)")
+      .forEach((el) => el.classList.add("hidden"));
+
+    document
+      .querySelectorAll(`[data-tab="${el.dataset.setTab}"]`)
+      .forEach((el) => {
+        el.classList.remove("hidden");
+        if (el.__chartist__) {
+          el.__chartist__.update();
+        }
+      });
+  });
+});

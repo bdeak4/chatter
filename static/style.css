@@ -94,8 +94,12 @@ footer {
   color: var(--color-bg-teal-700);
 }
 
-.ct-series-a .ct-line {
+.ct-chart-line .ct-line {
   stroke: var(--color-bg-teal-500);
+}
+
+.line-chart--big {
+  height: 150px;
 }
 
 .total {
@@ -108,4 +112,14 @@ footer {
 
 .total > *:not(:last-child) {
   margin-right: 48px;
+}
+
+.tab {
+  text-decoration: none;
+}
+
+.tab:hover,
+.tab--active {
+  text-decoration: underline;
+  text-decoration-color: var(--color-bg-teal-400);
 }
