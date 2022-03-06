@@ -25,6 +25,9 @@ def total_mentions(con, time_period):
     return list(map(lambda m: m[1], mentions_by_date))
 
 
+# https://www.coingecko.com/market_cap/total_charts_data?vs_currency=usd
+
+
 def weekly_count_by_content_type(con):
     return {
         "submission": count(con, "week", "submission"),

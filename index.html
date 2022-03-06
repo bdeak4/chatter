@@ -78,13 +78,18 @@
       <h2>past month</h2>
       ...
 
+      <h2>coingecko trending</h2>
+      ...
+
       <div class="total">
         <div>
           <h2>total mentions</h2>
-          <a href="" class="tab tab--active" data-set-tab="week">week</a>
-          <a href="" class="tab" data-set-tab="month">month</a>
-          <a href="" class="tab" data-set-tab="quarter">quarter</a>
-          <a href="" class="tab" data-set-tab="year">year</a>
+          <div class="tab-nav">
+            <a href="" class="tab tab--active" data-set-tab="week">week</a>
+            <a href="" class="tab" data-set-tab="month">month</a>
+            <a href="" class="tab" data-set-tab="quarter">quarter</a>
+            <a href="" class="tab" data-set-tab="year">year</a>
+          </div>
           <div
             class="line-chart line-chart--big"
             data-values="{{ ','.join(total_mentions['week']) }}"
@@ -108,10 +113,12 @@
         </div>
         <div>
           <h2>total market cap</h2>
-          <a href="" class="tab tab--active" data-set-tab="week">week</a>
-          <a href="" class="tab" data-set-tab="month">month</a>
-          <a href="" class="tab" data-set-tab="quarter">quarter</a>
-          <a href="" class="tab" data-set-tab="year">year</a>
+          <div class="tab-nav">
+            <a href="" class="tab tab--active" data-set-tab="week">week</a>
+            <a href="" class="tab" data-set-tab="month">month</a>
+            <a href="" class="tab" data-set-tab="quarter">quarter</a>
+            <a href="" class="tab" data-set-tab="year">year</a>
+          </div>
           <div data-tab="week">chart week</div>
           <div class="hidden" data-tab="month">chart month</div>
           <div class="hidden" data-tab="quarter">chart quarter</div>
@@ -119,10 +126,12 @@
         </div>
         <div>
           <h2>btc price</h2>
-          <a href="" class="tab tab--active" data-set-tab="week">week</a>
-          <a href="" class="tab" data-set-tab="month">month</a>
-          <a href="" class="tab" data-set-tab="quarter">quarter</a>
-          <a href="" class="tab" data-set-tab="year">year</a>
+          <div class="tab-nav">
+            <a href="" class="tab tab--active" data-set-tab="week">week</a>
+            <a href="" class="tab" data-set-tab="month">month</a>
+            <a href="" class="tab" data-set-tab="quarter">quarter</a>
+            <a href="" class="tab" data-set-tab="year">year</a>
+          </div>
           <div data-tab="week">chart week</div>
           <div class="hidden" data-tab="month">chart month</div>
           <div class="hidden" data-tab="quarter">chart quarter</div>

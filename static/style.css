@@ -123,3 +123,7 @@ footer {
   text-decoration: underline;
   text-decoration-color: var(--color-bg-teal-400);
 }
+
+.tab-nav {
+  margin-bottom: 8px;
+}
