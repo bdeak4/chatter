@@ -1,4 +1,5 @@
 import Chartist from "https://cdn.skypack.dev/chartist";
+import Humanize from "https://cdn.skypack.dev/humanize-plus";
 
 document.querySelectorAll(".pie-chart").forEach((el) => {
   const values = el.dataset.values.split(",").map((v) => parseInt(v));
@@ -28,7 +29,10 @@ document.querySelectorAll(".line-chart").forEach((el) => {
         showLabel: false,
         showGrid: false,
       },
-      axisY: { offset: 24 },
+      axisY: {
+        offset: 24,
+        labelInterpolationFnc: (value) => Humanize.compactInteger(value, 1),
+      },
     }
   );
 });

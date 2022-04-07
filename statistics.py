@@ -1,4 +1,8 @@
 import helpers
+from datetime import date
+import requests
+
+from ingestion import get_coingecko_market_cap_data
 
 
 def total_mentions_by_time_period(con):
@@ -25,7 +29,19 @@ def total_mentions(con, time_period):
     return list(map(lambda m: m[1], mentions_by_date))
 
 
-# https://www.coingecko.com/market_cap/total_charts_data?vs_currency=usd
+def total_market_cap_by_time_period():
+    return {
+        "week": map(str, total_market_cap("week")),
+        "month": map(str, total_market_cap("month")),
+        "quarter": map(str, total_market_cap("quarter")),
+        "year": map(str, total_market_cap("year")),
+    }
+
+
+def total_market_cap(time_period):
+    number_of_data_points = helpers.time_period_len(time_period)
+    market_cap_by_date = get_coingecko_market_cap_data()[-number_of_data_points:]
+    return list(map(lambda d: int(d[1]), market_cap_by_date))
 
 
 def weekly_count_by_content_type(con):

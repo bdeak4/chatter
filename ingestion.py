@@ -56,34 +56,53 @@ def get_praw_instance(content_type):
 
 def is_on_coingecko(symbol):
     return (
-        get_coingecko_data_by_symbol(symbol) != None
+        get_coingecko_coin_data_by_symbol(symbol) != None
         and not symbol in config["symbol_blocklist"]
     )
 
 
-def get_coingecko_data_by_symbol(symbol):
-    for coin in get_coingecko_data():
+def get_coingecko_coin_data_by_symbol(symbol):
+    for coin in get_coingecko_coin_data():
         if coin["symbol"] == symbol and coin["market_cap_rank"]:
             return coin
 
     return None
 
 
-_coingecko_data = []
-_coingecko_data_modified = datetime(2009, 1, 9)
+_coingecko_coin_data = []
+_coingecko_coin_data_modified = datetime(2009, 1, 9)
 
 
-def get_coingecko_data():
-    global _coingecko_data
-    global _coingecko_data_modified
+def get_coingecko_coin_data():
+    global _coingecko_coin_data
+    global _coingecko_coin_data_modified
 
-    if (datetime.now() - _coingecko_data_modified) > timedelta(hours=2):
+    if (datetime.now() - _coingecko_coin_data_modified) > timedelta(hours=2):
         r = requests.get("https://api.coingecko.com/api/v3/search")
         if r.ok:
-            _coingecko_data = r.json()["coins"]
-            _coingecko_data_modified = datetime.now()
+            _coingecko_coin_data = r.json()["coins"]
+            _coingecko_coin_data_modified = datetime.now()
 
-    return _coingecko_data
+    return _coingecko_coin_data
+
+
+_coingecko_market_cap_data = []
+_coingecko_market_cap_data_modified = datetime(2009, 1, 9)
+
+
+def get_coingecko_market_cap_data():
+    global _coingecko_market_cap_data
+    global _coingecko_market_cap_data_modified
+
+    if (datetime.now() - _coingecko_market_cap_data_modified) > timedelta(hours=2):
+        r = requests.get(
+            "https://www.coingecko.com/market_cap/total_charts_data?vs_currency=usd"
+        )
+        if r.ok:
+            _coingecko_market_cap_data = r.json()["stats"]
+            _coingecko_market_cap_data_modified = datetime.now()
+
+    return _coingecko_market_cap_data
 
 
 def analyze_text(text):

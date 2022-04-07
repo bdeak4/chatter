@@ -14,6 +14,7 @@ def index():
         return template(
             "index.html",
             total_mentions=statistics.total_mentions_by_time_period(con),
+            total_market_cap=statistics.total_market_cap_by_time_period(),
             weekly_count=statistics.weekly_count_by_content_type(con),
             current_year=datetime.date.today().year,
         )

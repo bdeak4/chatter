@@ -20,6 +20,10 @@ def daterange(start_date, end_date):
         yield start_date + timedelta(n + 1)
 
 
+def time_period_len(time_period):
+    return len(list(daterange(start_date(time_period), date.today())))
+
+
 def date_months_ago(n):
     today = date.today()
     month = today.month - n
@@ -45,6 +49,9 @@ def start_date(time_period):
 
 
 def fill_blanks(time_period, rows):
+    if not len(rows):
+        return []
+
     blank_cols = len(rows[0]) - 1
     all_rows = []
 
