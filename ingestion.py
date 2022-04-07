@@ -105,6 +105,30 @@ def get_coingecko_market_cap_data():
     return _coingecko_market_cap_data
 
 
+_coingecko_price_data = {}
+
+
+def get_coingecko_price_data_by_symbol(symbol):
+    global _coingecko_price_data
+
+    coin = get_coingecko_coin_data_by_symbol(symbol)
+    if coin == None:
+        return []
+
+    if symbol not in _coingecko_price_data or (
+        datetime.now() - _coingecko_price_data[symbol]["modified"]
+    ) > timedelta(hours=2):
+        days = 366 if symbol == "BTC" else 7  # btc needs year of price data for chart
+        r = requests.get(
+            f"https://api.coingecko.com/api/v3/coins/{coin['id']}/market_chart?vs_currency=usd&days={days}&interval=daily"
+        )
+        if r.ok:
+            _coingecko_price_data[symbol] = r.json()
+            _coingecko_price_data[symbol]["modified"] = datetime.now()
+
+    return _coingecko_price_data[symbol]["prices"]
+
+
 def analyze_text(text):
     tb = textblob.TextBlob(text)
     polarity = round(tb.sentiment.polarity, 1)

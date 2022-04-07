@@ -148,10 +148,26 @@
             <a href="" class="tab" data-set-tab="quarter">quarter</a>
             <a href="" class="tab" data-set-tab="year">year</a>
           </div>
-          <div data-tab="week">chart week</div>
-          <div class="hidden" data-tab="month">chart month</div>
-          <div class="hidden" data-tab="quarter">chart quarter</div>
-          <div class="hidden" data-tab="year">chart year</div>
+          <div
+            class="line-chart line-chart--big"
+            data-values="{{ ','.join(btc_price['week']) }}"
+            data-tab="week"
+          ></div>
+          <div
+            class="line-chart line-chart--big hidden"
+            data-values="{{ ','.join(btc_price['month']) }}"
+            data-tab="month"
+          ></div>
+          <div
+            class="line-chart line-chart--big hidden"
+            data-values="{{ ','.join(btc_price['quarter']) }}"
+            data-tab="quarter"
+          ></div>
+          <div
+            class="line-chart line-chart--big hidden"
+            data-values="{{ ','.join(btc_price['year']) }}"
+            data-tab="year"
+          ></div>
         </div>
       </div>
     </main>

@@ -31,7 +31,8 @@ document.querySelectorAll(".line-chart").forEach((el) => {
       },
       axisY: {
         offset: 24,
-        labelInterpolationFnc: (value) => Humanize.compactInteger(value, 1),
+        labelInterpolationFnc: (value) =>
+          Humanize.compactInteger(value, value > 1000000 ? 1 : 0),
       },
     }
   );

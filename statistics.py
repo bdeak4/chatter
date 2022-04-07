@@ -2,7 +2,7 @@ import helpers
 from datetime import date
 import requests
 
-from ingestion import get_coingecko_market_cap_data
+from ingestion import get_coingecko_market_cap_data, get_coingecko_price_data_by_symbol
 
 
 def total_mentions_by_time_period(con):
@@ -42,6 +42,23 @@ def total_market_cap(time_period):
     number_of_data_points = helpers.time_period_len(time_period)
     market_cap_by_date = get_coingecko_market_cap_data()[-number_of_data_points:]
     return list(map(lambda d: int(d[1]), market_cap_by_date))
+
+
+def btc_price_by_time_period():
+    return {
+        "week": map(str, btc_price("week")),
+        "month": map(str, btc_price("month")),
+        "quarter": map(str, btc_price("quarter")),
+        "year": map(str, btc_price("year")),
+    }
+
+
+def btc_price(time_period):
+    number_of_data_points = helpers.time_period_len(time_period)
+    btc_price_by_date = get_coingecko_price_data_by_symbol("BTC")[
+        -number_of_data_points:
+    ]
+    return list(map(lambda d: int(d[1]), btc_price_by_date))
 
 
 def weekly_count_by_content_type(con):

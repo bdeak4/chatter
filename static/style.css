@@ -114,6 +114,20 @@ footer {
   margin-right: 48px;
 }
 
+@media screen and (max-width: 768px) {
+  .total {
+    flex-wrap: wrap;
+  }
+
+  .total > * {
+    width: 100%;
+  }
+
+  .total > *:not(:last-child) {
+    margin-right: 0;
+  }
+}
+
 .tab {
   text-decoration: none;
 }
