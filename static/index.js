@@ -16,7 +16,7 @@ document.querySelectorAll(".pie-chart").forEach((el) => {
   );
 });
 
-document.querySelectorAll(".line-chart").forEach((el) => {
+document.querySelectorAll(".line-chart.line-chart--big").forEach((el) => {
   const values = el.dataset.values.split(",").map((v) => parseInt(v));
 
   new Chartist.Line(

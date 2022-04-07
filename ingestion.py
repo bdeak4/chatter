@@ -148,21 +148,7 @@ def insert_symbol(symbol, content_type, polarity, subjectivity):
     con.commit()
 
 
-def create_table():
-    cur = con.cursor()
-    cur.execute(
-        """
-        CREATE TABLE IF NOT EXISTS mentions (
-            symbol, timestamp, content_type, polarity, subjectivity
-        );
-        """
-    )
-    con.commit()
-
-
 def ingest_in_background():
-    create_table()
-
     ingest_args = [
         ("comment", lambda c: c.body),
         ("submission", lambda s: s.title + "\n" + s.selftext),
