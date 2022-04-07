@@ -15,6 +15,17 @@ def sql_time_interval(time_period):
         return "-1 year"
 
 
+def sql_time_period_from_ts(time_period):
+    if time_period == "day":
+        return "DATE(timestamp)"
+
+    if time_period == "week":
+        return "strftime('%W', timestamp)"
+
+    if time_period == "month":
+        return "strftime('%m', timestamp)"
+
+
 def daterange(start_date, end_date):
     for n in range((end_date - start_date).days):
         yield start_date + timedelta(n + 1)

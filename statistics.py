@@ -1,8 +1,28 @@
-import helpers
 from datetime import date
-import requests
 
-from ingestion import get_coingecko_market_cap_data, get_coingecko_price_data_by_symbol
+import helpers
+import ingestion
+
+
+def most_mentioned_coins_by_time_period(con):
+    return {
+        "week": most_mentioned_coins(con, "day"),
+        "month": most_mentioned_coins(con, "week"),
+    }
+
+
+def most_mentioned_coins(con, time_increment):
+    cur = con.cursor()
+    cur.execute(
+        f"""
+        SELECT symbol, AVG(growth) AS avg_growth
+        FROM mention_stats_by_{time_increment}
+        GROUP BY symbol
+        ORDER BY avg_growth DESC
+        LIMIT 10;
+        """
+    )
+    return cur.fetchall()
 
 
 def total_mentions_by_time_period(con):
@@ -40,7 +60,9 @@ def total_market_cap_by_time_period():
 
 def total_market_cap(time_period):
     number_of_data_points = helpers.time_period_len(time_period)
-    market_cap_by_date = get_coingecko_market_cap_data()[-number_of_data_points:]
+    market_cap_by_date = ingestion.get_coingecko_market_cap_data()[
+        -number_of_data_points:
+    ]
     return list(map(lambda d: int(d[1]), market_cap_by_date))
 
 
@@ -55,7 +77,7 @@ def btc_price_by_time_period():
 
 def btc_price(time_period):
     number_of_data_points = helpers.time_period_len(time_period)
-    btc_price_by_date = get_coingecko_price_data_by_symbol("BTC")[
+    btc_price_by_date = ingestion.get_coingecko_price_data_by_symbol("BTC")[
         -number_of_data_points:
     ]
     return list(map(lambda d: int(d[1]), btc_price_by_date))
