@@ -129,6 +129,23 @@ def get_coingecko_price_data_by_symbol(symbol):
     return _coingecko_price_data[symbol]["prices"]
 
 
+_coingecko_trending_data = []
+_coingecko_trending_data_modified = datetime(2009, 1, 9)
+
+
+def get_coingecko_trending_data():
+    global _coingecko_trending_data
+    global _coingecko_trending_data_modified
+
+    if (datetime.now() - _coingecko_trending_data_modified) > timedelta(hours=2):
+        r = requests.get("https://api.coingecko.com/api/v3/search/trending")
+        if r.ok:
+            _coingecko_trending_data = r.json()["coins"]
+            _coingecko_trending_data_modified = datetime.now()
+
+    return _coingecko_trending_data
+
+
 def analyze_text(text):
     tb = textblob.TextBlob(text)
     polarity = round(tb.sentiment.polarity, 1)

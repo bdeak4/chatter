@@ -8,6 +8,7 @@ def mention_growth_coins_by_time_period(con):
     return [
         ("past week", mention_growth_coins(con, "day", "week")),
         ("past month", mention_growth_coins(con, "week", "month")),
+        ("coingecko trending", trending_coins(con)),
     ]
 
 
@@ -23,36 +24,49 @@ def mention_growth_coins(con, time_increment, time_period):
         """
     )
 
-    def get_coin_data(row):
-        symbol, _ = row
-        cur.execute(
-            f"""
-            SELECT pol_positive, pol_neutral, pol_negative,
-                sub_subjective, sub_objective,
-                ct_submission, ct_comment
-            FROM mention_stats_by_{time_period}
-            WHERE symbol = ?
-            ORDER BY time_period DESC
-            LIMIT 1;
-            """,
-            (symbol,),
-        )
-        data = cur.fetchone()
-        return {
-            "symbol": symbol,
-            "pol_positive": data[0],
-            "pol_neutral": data[1],
-            "pol_negative": data[2],
-            "sub_subjective": data[3],
-            "sub_objective": data[4],
-            "ct_submission": data[5],
-            "ct_comment": data[6],
-            "price": map(str, get_price_by_symbol_and_time_period(symbol, time_period)),
-            "url": "https://www.coingecko.com/en/coins/"
-            + ingestion.get_coingecko_coin_data_by_symbol(symbol)["id"],
-        }
+    return list(map(lambda c: get_coin_data(con, c[0], time_period), cur.fetchall()))
 
-    return list(map(get_coin_data, cur.fetchall()))
+
+def trending_coins(con):
+    return list(
+        map(
+            lambda tc: get_coin_data(con, tc["item"]["symbol"], "week"),
+            ingestion.get_coingecko_trending_data(),
+        )
+    )
+
+
+def get_coin_data(con, symbol, time_period):
+    cur = con.cursor()
+    cur.execute(
+        f"""
+        SELECT pol_positive, pol_neutral, pol_negative,
+            sub_subjective, sub_objective,
+            ct_submission, ct_comment
+        FROM mention_stats_by_{time_period}
+        WHERE symbol = ?
+        ORDER BY time_period DESC
+        LIMIT 1;
+        """,
+        (symbol,),
+    )
+    data = cur.fetchone()
+    if data == None:
+        data = (0, 0, 0, 0, 0, 0, 0)
+
+    return {
+        "symbol": symbol,
+        "pol_positive": data[0],
+        "pol_neutral": data[1],
+        "pol_negative": data[2],
+        "sub_subjective": data[3],
+        "sub_objective": data[4],
+        "ct_submission": data[5],
+        "ct_comment": data[6],
+        "price": map(str, get_price_by_symbol_and_time_period(symbol, time_period)),
+        "url": "https://www.coingecko.com/en/coins/"
+        + ingestion.get_coingecko_coin_data_by_symbol(symbol)["id"],
+    }
 
 
 def total_charts(con):
