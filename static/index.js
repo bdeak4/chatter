@@ -16,13 +16,38 @@ document.querySelectorAll(".pie-chart").forEach((el) => {
   );
 });
 
-document.querySelectorAll(".line-chart.line-chart--big").forEach((el) => {
-  const values = el.dataset.values.split(",").map((v) => parseInt(v));
+document.querySelectorAll(".line-chart.line-chart--small").forEach((el) => {
+  const values = el.dataset.values.split(",").map((v) => parseFloat(v));
 
   new Chartist.Line(
     el,
     { series: [values] },
     {
+      fullWidth: true,
+      fullHeight: true,
+      showPoint: false,
+      axisX: {
+        showLabel: false,
+        showGrid: false,
+        offset: 0,
+      },
+      axisY: {
+        showLabel: false,
+        showGrid: false,
+        offset: 0,
+      },
+    }
+  );
+});
+
+document.querySelectorAll(".line-chart.line-chart--big").forEach((el) => {
+  const values = el.dataset.values.split(",").map((v) => parseFloat(v));
+
+  new Chartist.Line(
+    el,
+    { series: [values] },
+    {
+      height: 150,
       fullWidth: true,
       showPoint: false,
       axisX: {

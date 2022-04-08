@@ -14,10 +14,8 @@ def index():
     with sqlite3.connect("chatter.db") as con:
         return template(
             "index.html",
-            most_mentioned_coins=statistics.most_mentioned_coins_by_time_period(con),
-            total_mentions=statistics.total_mentions_by_time_period(con),
-            total_market_cap=statistics.total_market_cap_by_time_period(),
-            btc_price=statistics.btc_price_by_time_period(),
+            mention_growth_coins=statistics.mention_growth_coins_by_time_period(con),
+            total_charts=statistics.total_charts(con),
             weekly_count=statistics.weekly_count_by_content_type(con),
             current_year=datetime.date.today().year,
         )

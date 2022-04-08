@@ -19,7 +19,8 @@
     </header>
 
     <main class="container">
-      <h2>past week</h2>
+      % for title, coins in mention_growth_coins:
+      <h2>{{ title }}</h2>
       <table class="coin-table">
         <tr>
           <th>symbol</th>
@@ -29,61 +30,51 @@
           <th>mentions</th>
           <th>price</th>
         </tr>
+        % for coin in coins:
         <tr>
-          <td><a href="">BTC</a></td>
           <td>
-            <div class="pie-chart" data-values="56,37" title="explain"></div>
+            <a href="{{ coin['url'] }}" target="_blank">{{ coin['symbol'] }}</a>
           </td>
           <td>
             <div
               class="pie-chart pie-chart--tricolor"
-              data-values="40,0,20"
-              title="explain this"
-            ></div>
-          </td>
-          <td>
-            <div class="pie-chart" data-values="5,50" title="explain"></div>
-          </td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td><a href="">ETH</a></td>
-          <td>
-            <div
-              class="pie-chart"
-              data-values="88,12"
-              title="explain this"
-            ></div>
-          </td>
-          <td>
-            <div
-              class="pie-chart pie-chart--tricolor"
-              data-values="20,6,50"
-              title="explain this"
+              data-values="{{ coin['pol_positive'] }},{{ coin['pol_neutral'] }},{{ coin['pol_negative'] }}"
+              title="{{ coin['pol_positive'] }} positive, {{ coin['pol_neutral'] }} neutral, {{ coin['pol_negative'] }} negative"
             ></div>
           </td>
           <td>
             <div
               class="pie-chart"
-              data-values="1,40"
-              title="explain this"
+              data-values="{{ coin['sub_subjective'] }},{{ coin['sub_objective'] }}"
+              title="{{ coin['sub_subjective'] }} subjective, {{ coin['sub_objective'] }} objective"
+            ></div>
+          </td>
+          <td>
+            <div
+              class="pie-chart"
+              data-values="{{ coin['ct_submission'] }},{{ coin['ct_comment'] }}"
+              title="{{ coin['ct_submission'] }} submissions, {{ coin['ct_comment'] }} comment"
             ></div>
           </td>
           <td></td>
-          <td></td>
+          <td>
+            <div
+              class="line-chart line-chart--small"
+              data-values="{{ ','.join(coin['price']) }}"
+            ></div>
+          </td>
         </tr>
+        % end
       </table>
-
-      <h2>past month</h2>
-      ...
+      % end
 
       <h2>coingecko trending</h2>
       ...
 
       <div class="total">
+        % for title, chart_data in total_charts:
         <div>
-          <h2>total mentions</h2>
+          <h2>{{ title }}</h2>
           <div class="tab-nav">
             <a href="" class="tab tab--active" data-set-tab="week">week</a>
             <a href="" class="tab" data-set-tab="month">month</a>
@@ -92,96 +83,39 @@
           </div>
           <div
             class="line-chart line-chart--big"
-            data-values="{{ ','.join(total_mentions['week']) }}"
+            data-values="{{ ','.join(chart_data['week']) }}"
             data-tab="week"
           ></div>
           <div
             class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(total_mentions['month']) }}"
+            data-values="{{ ','.join(chart_data['month']) }}"
             data-tab="month"
           ></div>
           <div
             class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(total_mentions['quarter']) }}"
+            data-values="{{ ','.join(chart_data['quarter']) }}"
             data-tab="quarter"
           ></div>
           <div
             class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(total_mentions['year']) }}"
+            data-values="{{ ','.join(chart_data['year']) }}"
             data-tab="year"
           ></div>
         </div>
-        <div>
-          <h2>total market cap</h2>
-          <div class="tab-nav">
-            <a href="" class="tab tab--active" data-set-tab="week">week</a>
-            <a href="" class="tab" data-set-tab="month">month</a>
-            <a href="" class="tab" data-set-tab="quarter">quarter</a>
-            <a href="" class="tab" data-set-tab="year">year</a>
-          </div>
-          <div
-            class="line-chart line-chart--big"
-            data-values="{{ ','.join(total_market_cap['week']) }}"
-            data-tab="week"
-          ></div>
-          <div
-            class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(total_market_cap['month']) }}"
-            data-tab="month"
-          ></div>
-          <div
-            class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(total_market_cap['quarter']) }}"
-            data-tab="quarter"
-          ></div>
-          <div
-            class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(total_market_cap['year']) }}"
-            data-tab="year"
-          ></div>
-        </div>
-        <div>
-          <h2>btc price</h2>
-          <div class="tab-nav">
-            <a href="" class="tab tab--active" data-set-tab="week">week</a>
-            <a href="" class="tab" data-set-tab="month">month</a>
-            <a href="" class="tab" data-set-tab="quarter">quarter</a>
-            <a href="" class="tab" data-set-tab="year">year</a>
-          </div>
-          <div
-            class="line-chart line-chart--big"
-            data-values="{{ ','.join(btc_price['week']) }}"
-            data-tab="week"
-          ></div>
-          <div
-            class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(btc_price['month']) }}"
-            data-tab="month"
-          ></div>
-          <div
-            class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(btc_price['quarter']) }}"
-            data-tab="quarter"
-          ></div>
-          <div
-            class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(btc_price['year']) }}"
-            data-tab="year"
-          ></div>
-        </div>
+        % end
       </div>
     </main>
 
-    {{most_mentioned_coins}}
-
     <footer class="container">
       <hr />
-      {{ weekly_count["submission"] }} posts and {{ weekly_count["comment"] }}
-      comments analyzed in the past week
-      <span style="white-space: nowrap">
-        | &copy; 2021-{{ current_year }}
-        <a href="https://bdeak.net">Bartol Deak</a>
-      </span>
+      <div class="copy">
+        {{ weekly_count["submission"] }} posts and {{ weekly_count["comment"] }}
+        comments analyzed in the past week
+        <span style="white-space: nowrap">
+          | &copy; 2021-{{ current_year }}
+          <a href="https://bdeak.net">Bartol Deak</a>
+        </span>
+      </div>
     </footer>
 
     <script src="/static/index.js" type="module"></script>

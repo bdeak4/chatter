@@ -4,14 +4,14 @@ import helpers
 import ingestion
 
 
-def most_mentioned_coins_by_time_period(con):
-    return {
-        "week": most_mentioned_coins(con, "day"),
-        "month": most_mentioned_coins(con, "week"),
-    }
+def mention_growth_coins_by_time_period(con):
+    return [
+        ("past week", mention_growth_coins(con, "day", "week")),
+        ("past month", mention_growth_coins(con, "week", "month")),
+    ]
 
 
-def most_mentioned_coins(con, time_increment):
+def mention_growth_coins(con, time_increment, time_period):
     cur = con.cursor()
     cur.execute(
         f"""
@@ -19,10 +19,48 @@ def most_mentioned_coins(con, time_increment):
         FROM mention_stats_by_{time_increment}
         GROUP BY symbol
         ORDER BY avg_growth DESC
-        LIMIT 10;
+        LIMIT 7;
         """
     )
-    return cur.fetchall()
+
+    def get_coin_data(row):
+        symbol, _ = row
+        cur.execute(
+            f"""
+            SELECT pol_positive, pol_neutral, pol_negative,
+                sub_subjective, sub_objective,
+                ct_submission, ct_comment
+            FROM mention_stats_by_{time_period}
+            WHERE symbol = ?
+            ORDER BY time_period DESC
+            LIMIT 1;
+            """,
+            (symbol,),
+        )
+        data = cur.fetchone()
+        return {
+            "symbol": symbol,
+            "pol_positive": data[0],
+            "pol_neutral": data[1],
+            "pol_negative": data[2],
+            "sub_subjective": data[3],
+            "sub_objective": data[4],
+            "ct_submission": data[5],
+            "ct_comment": data[6],
+            "price": map(str, get_price_by_symbol_and_time_period(symbol, time_period)),
+            "url": "https://www.coingecko.com/en/coins/"
+            + ingestion.get_coingecko_coin_data_by_symbol(symbol)["id"],
+        }
+
+    return list(map(get_coin_data, cur.fetchall()))
+
+
+def total_charts(con):
+    return [
+        ("total mentions", total_mentions_by_time_period(con)),
+        ("total market cap", total_market_cap_by_time_period()),
+        ("btc price", btc_price_by_time_period()),
+    ]
 
 
 def total_mentions_by_time_period(con):
@@ -68,19 +106,19 @@ def total_market_cap(time_period):
 
 def btc_price_by_time_period():
     return {
-        "week": map(str, btc_price("week")),
-        "month": map(str, btc_price("month")),
-        "quarter": map(str, btc_price("quarter")),
-        "year": map(str, btc_price("year")),
+        "week": map(str, get_price_by_symbol_and_time_period("BTC", "week")),
+        "month": map(str, get_price_by_symbol_and_time_period("BTC", "month")),
+        "quarter": map(str, get_price_by_symbol_and_time_period("BTC", "quarter")),
+        "year": map(str, get_price_by_symbol_and_time_period("BTC", "year")),
     }
 
 
-def btc_price(time_period):
+def get_price_by_symbol_and_time_period(symbol, time_period):
     number_of_data_points = helpers.time_period_len(time_period)
-    btc_price_by_date = ingestion.get_coingecko_price_data_by_symbol("BTC")[
+    price_by_data_point = ingestion.get_coingecko_price_data_by_symbol(symbol)[
         -number_of_data_points:
     ]
-    return list(map(lambda d: int(d[1]), btc_price_by_date))
+    return list(map(lambda d: float(d[1]), price_by_data_point))
 
 
 def weekly_count_by_content_type(con):
