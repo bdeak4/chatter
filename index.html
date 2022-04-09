@@ -1,138 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>chatter</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<style>
-		body { font-family: monospace }
-		header, footer { text-align: center }
-		table { width: 100%; white-space: nowrap }
-		td { padding-right: 20px }
-		a { color: blue }
-		tr:hover { background-color: #eee }
-	</style>
-</head>
-<body>
-	<header>
-		<h1>chatter</h1>
-	</header>
-	<hr>
-	<h2>crypto</h2>
-	<table>
-		<tr style="text-align: left">
-			<th>ticker</th>
-			<th>polarity</th>
-			<th>subjectivity</th>
-			<th>source</th>
-			<th>{{!weekdays}}</th>
-			<th>count</th>
-			<th>score</th>
-		</tr>
-		%for ticker in crypto_rising_this_week:
-		<tr>
-			<td>
-				%if ticker["link"] != "":
-				<a href="{{!ticker['link']}}" target="_blank">
-					{{ticker["name"]}}
-				</a>
-				%else:
-				{{ticker["name"]}}
-				%end
-			</td>
-			<td>
-				<span style="color: green">
-					{{!ticker["polarity_positive_count"]}}
-				</span>
-				positive,
-				{{!ticker["polarity_neutral_count"]}} neutral,
-				<span style="color: red">
-					{{!ticker["polarity_negative_count"]}}
-				</span>
-				negative
-			</td>
-			<td>
-				<span style="color: green">
-					{{!ticker["subjectivity_objective_count"]}}
-				</span>
-				objective,
-				<span style="color: red">
-					{{!ticker["subjectivity_subjective_count"]}}
-				</span>
-				subjective
-			</td>
-			<td>
-				{{!ticker["source_post_count"]}} posts,
-				{{!ticker["source_comment_count"]}} comments
-			</td>
-			<td>{{!ticker["change_by_day"]}}</td>
-			<td>{{ticker["count"]}}</td>
-			<td>{{ticker["score"]}}</td>
-		</tr>
-		%end
-	</table>
-	<h2>stocks</h2>
-	<table>
-		<tr style="text-align: left">
-			<th>ticker</th>
-			<th>polarity</th>
-			<th>subjectivity</th>
-			<th>source</th>
-			<th>{{!weekdays}}</th>
-			<th>count</th>
-			<th>score</th>
-		</tr>
-		%for ticker in stocks_rising_this_week:
-		<tr>
-			<td>
-				%if ticker["link"] != "":
-				<a href="{{!ticker['link']}}" target="_blank">
-					{{ticker["name"]}}
-				</a>
-				%else:
-				{{ticker["name"]}}
-				%end
-			</td>
-			<td>
-				<span style="color: green">
-					{{!ticker["polarity_positive_count"]}}
-				</span>
-				positive,
-				{{!ticker["polarity_neutral_count"]}} neutral,
-				<span style="color: red">
-					{{!ticker["polarity_negative_count"]}}
-				</span>
-				negative
-			</td>
-			<td>
-				<span style="color: green">
-					{{!ticker["subjectivity_objective_count"]}}
-				</span>
-				objective,
-				<span style="color: red">
-					{{!ticker["subjectivity_subjective_count"]}}
-				</span>
-				subjective
-			</td>
-			<td>
-				{{!ticker["source_post_count"]}} posts,
-				{{!ticker["source_comment_count"]}} comments
-			</td>
-			<td>{{!ticker["change_by_day"]}}</td>
-			<td>{{ticker["count"]}}</td>
-			<td>{{ticker["score"]}}</td>
-		</tr>
-		%end
-	</table>
-	<hr style="margin-top: 16px">
-	<footer style="margin: 16px 0">
-		<span style="white-space: nowrap">
-		{{processed_today_count}} tickers processed today |
-		</span>
-		<span style="white-space: nowrap">
-		&copy; 2021 <a href="https://bdeak.net">Bartol Deak</a>
-		</span>
-	</footer>
-</body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chatter</title>
 
+    <link
+      rel="stylesheet"
+      href="https://cdn.skypack.dev/chartist/dist/chartist.min.css"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header class="container">
+      <h1>chatter</h1>
+      <hr />
+    </header>
+
+    <main class="container">
+      % for title, coins in mention_growth_coins:
+      <h2>{{ title }}</h2>
+      <div class="coin-table">
+        <div class="coin-table__row">
+          <div class="coin-table__column">symbol</div>
+          <div class="coin-table__column">
+            <span class="text-desktop">polarity</span>
+            <span class="text-mobile">pol</span>
+          </div>
+          <div class="coin-table__column">
+            <span class="text-desktop">subjectivity</span>
+            <span class="text-mobile">sub</span>
+          </div>
+          <div class="coin-table__column">
+            <span class="text-desktop">content type</span>
+            <span class="text-mobile">ct</span>
+          </div>
+          <div class="coin-table__column coin-table__column--line-chart">
+            mentions
+          </div>
+          <div class="coin-table__column coin-table__column--line-chart">
+            price
+          </div>
+        </div>
+        % for coin in coins:
+        <div class="coin-table__row">
+          <div class="coin-table__column">
+            <a href="{{ coin['url'] }}" target="_blank">{{ coin['symbol'] }}</a>
+          </div>
+          <div class="coin-table__column">
+            <div
+              class="pie-chart pie-chart--tricolor"
+              data-values="{{ coin['pol_positive'] }},{{ coin['pol_neutral'] }},{{ coin['pol_negative'] }}"
+              title="{{ coin['pol_positive'] }} positive, {{ coin['pol_neutral'] }} neutral, {{ coin['pol_negative'] }} negative"
+            ></div>
+          </div>
+          <div class="coin-table__column">
+            <div
+              class="pie-chart"
+              data-values="{{ coin['sub_subjective'] }},{{ coin['sub_objective'] }}"
+              title="{{ coin['sub_subjective'] }} subjective, {{ coin['sub_objective'] }} objective"
+            ></div>
+          </div>
+          <div class="coin-table__column">
+            <div
+              class="pie-chart"
+              data-values="{{ coin['ct_submission'] }},{{ coin['ct_comment'] }}"
+              title="{{ coin['ct_submission'] }} submissions, {{ coin['ct_comment'] }} comment"
+            ></div>
+          </div>
+          <div class="coin-table__column">
+            <div
+              class="line-chart line-chart--small"
+              data-values="{{ ','.join(coin['mentions']) }}"
+            ></div>
+          </div>
+          <div class="coin-table__column">
+            <div
+              class="line-chart line-chart--small"
+              data-values="{{ ','.join(coin['price']) }}"
+            ></div>
+          </div>
+        </div>
+        % end
+      </div>
+      % end
+
+      <div class="total">
+        % for title, chart_data in total_charts:
+        <div>
+          <h2>{{ title }}</h2>
+          <div class="tab-nav">
+            <span class="tab tab--active" data-set-tab="week">week</span>
+            <span class="tab" data-set-tab="month">month</span>
+            <span class="tab" data-set-tab="quarter">quarter</span>
+            <span class="tab" data-set-tab="year">year</span>
+          </div>
+          <div
+            class="line-chart line-chart--big"
+            data-values="{{ ','.join(chart_data['week']) }}"
+            data-tab="week"
+          ></div>
+          <div
+            class="line-chart line-chart--big hidden"
+            data-values="{{ ','.join(chart_data['month']) }}"
+            data-tab="month"
+          ></div>
+          <div
+            class="line-chart line-chart--big hidden"
+            data-values="{{ ','.join(chart_data['quarter']) }}"
+            data-tab="quarter"
+          ></div>
+          <div
+            class="line-chart line-chart--big hidden"
+            data-values="{{ ','.join(chart_data['year']) }}"
+            data-tab="year"
+          ></div>
+        </div>
+        % end
+      </div>
+    </main>
+
+    <footer class="container">
+      <hr />
+      <div class="copy">
+        {{ weekly_count["submission"] }} posts and {{ weekly_count["comment"] }}
+        comments analyzed in the past week
+        <span style="white-space: nowrap">
+          | &copy; 2021-{{ current_year }}
+          <a href="https://bdeak.net">Bartol Deak</a>
+        </span>
+      </div>
+    </footer>
+
+    <script src="/static/index.js" type="module"></script>
+  </body>
+</html>
