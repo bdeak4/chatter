@@ -21,56 +21,69 @@
     <main class="container">
       % for title, coins in mention_growth_coins:
       <h2>{{ title }}</h2>
-      <table class="coin-table">
-        <tr>
-          <th>symbol</th>
-          <th>polarity</th>
-          <th>subjectivity</th>
-          <th>content type</th>
-          <th>mentions</th>
-          <th>price</th>
-        </tr>
+      <div class="coin-table">
+        <div class="coin-table__row">
+          <div class="coin-table__column">symbol</div>
+          <div class="coin-table__column">
+            <span class="text-desktop">polarity</span>
+            <span class="text-mobile">pol</span>
+          </div>
+          <div class="coin-table__column">
+            <span class="text-desktop">subjectivity</span>
+            <span class="text-mobile">subj</span>
+          </div>
+          <div class="coin-table__column">
+            <span class="text-desktop">content type</span>
+            <span class="text-mobile">ct</span>
+          </div>
+          <div class="coin-table__column coin-table__column--line-chart">
+            mentions
+          </div>
+          <div class="coin-table__column coin-table__column--line-chart">
+            price
+          </div>
+        </div>
         % for coin in coins:
-        <tr>
-          <td>
+        <div class="coin-table__row">
+          <div class="coin-table__column">
             <a href="{{ coin['url'] }}" target="_blank">{{ coin['symbol'] }}</a>
-          </td>
-          <td>
+          </div>
+          <div class="coin-table__column">
             <div
               class="pie-chart pie-chart--tricolor"
               data-values="{{ coin['pol_positive'] }},{{ coin['pol_neutral'] }},{{ coin['pol_negative'] }}"
               title="{{ coin['pol_positive'] }} positive, {{ coin['pol_neutral'] }} neutral, {{ coin['pol_negative'] }} negative"
             ></div>
-          </td>
-          <td>
+          </div>
+          <div class="coin-table__column">
             <div
               class="pie-chart"
               data-values="{{ coin['sub_subjective'] }},{{ coin['sub_objective'] }}"
               title="{{ coin['sub_subjective'] }} subjective, {{ coin['sub_objective'] }} objective"
             ></div>
-          </td>
-          <td>
+          </div>
+          <div class="coin-table__column">
             <div
               class="pie-chart"
               data-values="{{ coin['ct_submission'] }},{{ coin['ct_comment'] }}"
               title="{{ coin['ct_submission'] }} submissions, {{ coin['ct_comment'] }} comment"
             ></div>
-          </td>
-          <td>
+          </div>
+          <div class="coin-table__column">
             <div
               class="line-chart line-chart--small"
               data-values="{{ ','.join(coin['mentions']) }}"
             ></div>
-          </td>
-          <td>
+          </div>
+          <div class="coin-table__column">
             <div
               class="line-chart line-chart--small"
               data-values="{{ ','.join(coin['price']) }}"
             ></div>
-          </td>
-        </tr>
+          </div>
+        </div>
         % end
-      </table>
+      </div>
       % end
 
       <div class="total">

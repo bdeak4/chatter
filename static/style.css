@@ -68,19 +68,6 @@ h2 {
   margin-top: 24px;
 }
 
-.coin-table {
-  width: 100%;
-  table-layout: fixed;
-}
-
-.coin-table th {
-  text-align: left;
-}
-
-.coin-table th:last-child {
-  width: 140px;
-}
-
 .pie-chart {
   width: 32px;
   height: 32px;
@@ -168,4 +155,42 @@ h2 {
 
 .copy {
   margin: 16px 0;
+}
+
+.coin-table {
+  overflow: auto hidden;
+}
+
+.coin-table__row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.coin-table__column {
+  width: 140px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.text-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 1000px) {
+  .coin-table__column:not(:nth-last-child(-n + 2)) {
+    width: 42px;
+  }
+
+  .coin-table__column:first-child {
+    width: 70px;
+  }
+
+  .text-mobile {
+    display: initial;
+  }
+
+  .text-desktop {
+    display: none;
+  }
 }
