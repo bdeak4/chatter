@@ -140,7 +140,7 @@ h2 {
 }
 
 .tab {
-  text-decoration: none;
+  cursor: pointer;
 }
 
 .tab:hover,
