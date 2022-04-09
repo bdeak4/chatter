@@ -54,6 +54,18 @@ def get_coin_data(con, symbol, time_period):
     if data == None:
         data = (0, 0, 0, 0, 0, 0, 0)
 
+    cur.execute(
+        """
+        SELECT DATE(timestamp), COUNT(*)
+        FROM mentions
+        WHERE timestamp >= DATETIME('now', 'start of day', ?)
+          AND symbol = ?
+        GROUP BY DATE(timestamp);
+        """,
+        (helpers.sql_time_interval(time_period), symbol),
+    )
+    mentions_by_date = helpers.fill_blanks(time_period, cur.fetchall())
+
     return {
         "symbol": symbol,
         "pol_positive": data[0],
@@ -63,6 +75,7 @@ def get_coin_data(con, symbol, time_period):
         "sub_objective": data[4],
         "ct_submission": data[5],
         "ct_comment": data[6],
+        "mentions": map(lambda m: str(m[1]), mentions_by_date),
         "price": map(str, get_price_by_symbol_and_time_period(symbol, time_period)),
         "url": "https://www.coingecko.com/en/coins/"
         + ingestion.get_coingecko_coin_data_by_symbol(symbol)["id"],

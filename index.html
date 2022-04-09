@@ -56,7 +56,12 @@
               title="{{ coin['ct_submission'] }} submissions, {{ coin['ct_comment'] }} comment"
             ></div>
           </td>
-          <td></td>
+          <td>
+            <div
+              class="line-chart line-chart--small"
+              data-values="{{ ','.join(coin['mentions']) }}"
+            ></div>
+          </td>
           <td>
             <div
               class="line-chart line-chart--small"

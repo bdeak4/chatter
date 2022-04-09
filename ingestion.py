@@ -118,7 +118,7 @@ def get_coingecko_price_data_by_symbol(symbol):
     if symbol not in _coingecko_price_data or (
         datetime.now() - _coingecko_price_data[symbol]["modified"]
     ) > timedelta(hours=2):
-        days = 366 if symbol == "BTC" else 7  # btc needs year of price data for chart
+        days = 366 if symbol == "BTC" else 32  # btc needs year of price data for chart
         r = requests.get(
             f"https://api.coingecko.com/api/v3/coins/{coin['id']}/market_chart?vs_currency=usd&days={days}&interval=daily"
         )
