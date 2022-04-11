@@ -9,13 +9,13 @@ services:
       POSTGRES_USER: chatter
       POSTGRES_PASSWORD: chatter
     ports:
-      - 5001:5432
+      - 5003:5432
 
   cache:
     image: redis:6
     restart: on-failure
     ports:
-      - 5002:6379
+      - 5004:6379
 
   web:
     build: .
@@ -27,7 +27,7 @@ services:
       POSTGRES_URL: "postgres://chatter:chatter@db:5432/chatter"
       REDIS_URL: "redis://redis:6379/"
     ports:
-      - 4001:5000
+      - 4002:5000
     depends_on:
       - db
       - cache

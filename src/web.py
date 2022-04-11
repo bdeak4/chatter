@@ -1,5 +1,3 @@
-#!venv/bin/python
-
 from flask import Flask, render_template
 import sqlite3
 import datetime
