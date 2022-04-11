@@ -38,7 +38,7 @@
     </header>
 
     <main class="container">
-      % for title, coins in mention_growth_coins:
+      {% for title, coins in mention_growth_coins %}
       <h2>{{ title }}</h2>
       <div class="coin-table">
         <div class="coin-table__row">
@@ -62,7 +62,7 @@
             price
           </div>
         </div>
-        % for coin in coins:
+        {% for coin in coins %}
         <div class="coin-table__row">
           <div class="coin-table__column">
             <a href="{{ coin['url'] }}" target="_blank">{{ coin['symbol'] }}</a>
@@ -91,22 +91,22 @@
           <div class="coin-table__column">
             <div
               class="line-chart line-chart--small"
-              data-values="{{ ','.join(coin['mentions']) }}"
+              data-values="{{ coin['mentions']|join(',') }}"
             ></div>
           </div>
           <div class="coin-table__column">
             <div
               class="line-chart line-chart--small"
-              data-values="{{ ','.join(coin['price']) }}"
+              data-values="{{ coin['price']|join(',') }}"
             ></div>
           </div>
         </div>
-        % end
+        {% endfor %}
       </div>
-      % end
+      {% endfor %}
 
       <div class="total">
-        % for title, chart_data in total_charts:
+        {% for title, chart_data in total_charts %}
         <div>
           <h2>{{ title }}</h2>
           <div class="tab-nav">
@@ -117,26 +117,26 @@
           </div>
           <div
             class="line-chart line-chart--big"
-            data-values="{{ ','.join(chart_data['week']) }}"
+            data-values="{{ chart_data['week']|join(',') }}"
             data-tab="week"
           ></div>
           <div
             class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(chart_data['month']) }}"
+            data-values="{{ chart_data['month']|join(',') }}"
             data-tab="month"
           ></div>
           <div
             class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(chart_data['quarter']) }}"
+            data-values="{{ chart_data['quarter']|join(',') }}"
             data-tab="quarter"
           ></div>
           <div
             class="line-chart line-chart--big hidden"
-            data-values="{{ ','.join(chart_data['year']) }}"
+            data-values="{{ chart_data['year']|join(',') }}"
             data-tab="year"
           ></div>
         </div>
-        % end
+        {% endfor %}
       </div>
     </main>
 

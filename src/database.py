@@ -3,7 +3,7 @@ import helpers
 
 
 def init():
-    with sqlite3.connect("chatter.db") as con:
+    with sqlite3.connect("../chatter.db") as con:
         cur = con.cursor()
         cur.execute(
             """

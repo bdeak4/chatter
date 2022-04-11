@@ -21,3 +21,5 @@ update-checker==0.18.0
 urllib3==1.26.7
 waitress==2.0.0
 websocket-client==1.2.1
+flask
+gunicorn

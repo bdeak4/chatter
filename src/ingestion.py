@@ -9,10 +9,10 @@ from datetime import datetime, timedelta
 import sqlite3
 import multiprocessing
 
-config = json.loads(open("config.json").read())
-secrets = json.loads(open("secrets.json").read())
+config = json.loads(open("../config.json").read())
+secrets = json.loads(open("../secrets.json").read())
 symbol_regex = re.compile(r"\b[A-Z]{1,6}\b")
-con = sqlite3.connect("chatter.db")
+con = sqlite3.connect("../chatter.db")
 
 
 def ingest(content_type, get_text):
@@ -77,7 +77,7 @@ def get_coingecko_coin_data():
     global _coingecko_coin_data
     global _coingecko_coin_data_modified
 
-    if (datetime.now() - _coingecko_coin_data_modified) > timedelta(hours=2):
+    if (datetime.now() - _coingecko_coin_data_modified) > timedelta(hours=6):
         r = requests.get("https://api.coingecko.com/api/v3/search")
         if r.ok:
             _coingecko_coin_data = r.json()["coins"]
@@ -94,7 +94,7 @@ def get_coingecko_market_cap_data():
     global _coingecko_market_cap_data
     global _coingecko_market_cap_data_modified
 
-    if (datetime.now() - _coingecko_market_cap_data_modified) > timedelta(hours=2):
+    if (datetime.now() - _coingecko_market_cap_data_modified) > timedelta(hours=6):
         r = requests.get(
             "https://www.coingecko.com/market_cap/total_charts_data?vs_currency=usd"
         )
