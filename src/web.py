@@ -1,5 +1,6 @@
 from flask import Flask, render_template
-import sqlite3
+import psycopg2
+import os
 import datetime
 
 import statistics
@@ -10,7 +11,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    with sqlite3.connect("../chatter.db") as con:
+    with psycopg2.connect(os.getenv("POSTGRES_URL")) as con:
         return render_template(
             "index.jinja",
             mention_growth_coins=statistics.mention_growth_coins_by_time_period(con),

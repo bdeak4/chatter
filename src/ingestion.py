@@ -4,7 +4,8 @@ import json
 import re
 import praw
 import textblob
-import sqlite3
+import psycopg2
+import os
 import multiprocessing
 
 import database
@@ -13,7 +14,7 @@ import coingecko
 config = json.loads(open("../config.json").read())
 secrets = json.loads(open("../secrets.json").read())
 symbol_regex = re.compile(r"\b[A-Z]{1,6}\b")
-con = sqlite3.connect("../chatter.db")
+con = psycopg2.connect(os.getenv("POSTGRES_URL"))
 
 
 def ingest(content_type, get_text):
@@ -67,7 +68,7 @@ def insert_symbol(symbol, content_type, polarity, subjectivity):
     cur.execute(
         """
         INSERT INTO mentions (symbol, timestamp, content_type, polarity, subjectivity)
-        VALUES (?, DATETIME('now'), ?, ?, ?);
+        VALUES (%s, NOW(), %s, %s, %s);
         """,
         (symbol, content_type, polarity, subjectivity),
     )

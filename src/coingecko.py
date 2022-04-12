@@ -26,7 +26,7 @@ _coingecko_coin_data_modified = datetime(2009, 1, 9)
 
 
 def get_coingecko_coin_data():
-    if (datetime.now() - _coingecko_coin_data_modified) > timedelta(hours=6):
+    if (datetime.now() - _coingecko_coin_data_modified) > timedelta(hours=2):
         try_bg(_update_coingecko_coin_data, _coingecko_coin_data_modified)
 
     return _coingecko_coin_data
@@ -47,7 +47,7 @@ _coingecko_market_cap_data_modified = datetime(2009, 1, 9)
 
 
 def get_coingecko_market_cap_data():
-    if (datetime.now() - _coingecko_market_cap_data_modified) > timedelta(hours=6):
+    if (datetime.now() - _coingecko_market_cap_data_modified) > timedelta(hours=2):
         _update_coingecko_market_cap_data()
         try_bg(_update_coingecko_market_cap_data, _coingecko_market_cap_data_modified)
 
@@ -72,7 +72,7 @@ _coingecko_price_data = {}
 def get_coingecko_price_data_by_symbol(symbol):
     if symbol not in _coingecko_price_data or (
         datetime.now() - _coingecko_price_data[symbol]["modified"]
-    ) > timedelta(hours=2):
+    ) > timedelta(hours=1):
         try_bg(
             _update_coingecko_price_data_by_symbol,
             _coingecko_price_data[symbol]["modified"]
@@ -106,7 +106,7 @@ _coingecko_trending_data_modified = datetime(2009, 1, 9)
 
 
 def get_coingecko_trending_data():
-    if (datetime.now() - _coingecko_trending_data_modified) > timedelta(hours=2):
+    if (datetime.now() - _coingecko_trending_data_modified) > timedelta(hours=1):
         try_bg(_update_coingecko_trending_data, _coingecko_trending_data_modified)
 
     return _coingecko_trending_data

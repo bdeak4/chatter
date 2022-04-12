@@ -17,7 +17,7 @@ def mention_growth_coins(con, time_increment, time_period):
         SELECT symbol, AVG(growth) AS avg_growth
         FROM mention_stats_by_{time_increment}
         GROUP BY symbol
-        ORDER BY avg_growth DESC
+        ORDER BY avg_growth DESC NULLS LAST
         LIMIT 7;
         """
     )
@@ -42,7 +42,7 @@ def get_coin_data(con, symbol, time_period):
             sub_subjective, sub_objective,
             ct_submission, ct_comment
         FROM mention_stats_by_{time_period}
-        WHERE symbol = ?
+        WHERE symbol = %s
         ORDER BY time_period DESC
         LIMIT 1;
         """,
@@ -54,16 +54,15 @@ def get_coin_data(con, symbol, time_period):
 
     cur.execute(
         """
-        SELECT DATE(timestamp), COUNT(*)
+        SELECT timestamp::DATE, COUNT(*)
         FROM mentions
-        WHERE timestamp >= DATETIME('now', 'start of day', ?)
-          AND symbol = ?
-        GROUP BY DATE(timestamp);
+        WHERE timestamp >= NOW() - INTERVAL %s
+          AND symbol = %s
+        GROUP BY timestamp::DATE;
         """,
         (helpers.sql_time_interval(time_period), symbol),
     )
     mentions_by_date = helpers.fill_blanks(time_period, cur.fetchall())
-
     return {
         "symbol": symbol,
         "pol_positive": data[0],
@@ -101,10 +100,10 @@ def total_mentions(con, time_period):
     cur = con.cursor()
     cur.execute(
         """
-        SELECT DATE(timestamp), COUNT(*)
+        SELECT timestamp::DATE, COUNT(*)
         FROM mentions
-        WHERE timestamp >= DATETIME('now', 'start of day', ?)
-        GROUP BY DATE(timestamp);
+        WHERE timestamp >= NOW() - INTERVAL %s
+        GROUP BY timestamp::DATE;
         """,
         (helpers.sql_time_interval(time_period),),
     )
@@ -159,8 +158,8 @@ def count(con, time_period, content_type):
         """
         SELECT COUNT(*)
         FROM mentions
-        WHERE timestamp >= DATETIME('now', 'start of day', ?)
-          AND content_type = ?;
+        WHERE timestamp >= NOW() - INTERVAL %s
+          AND content_type = %s;
         """,
         (helpers.sql_time_interval(time_period), content_type),
     )

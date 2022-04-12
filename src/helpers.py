@@ -3,27 +3,27 @@ from datetime import date, timedelta
 
 def sql_time_interval(time_period):
     if time_period == "week":
-        return "-6 days"
+        return "1 WEEK"
 
     if time_period == "month":
-        return "-1 month"
+        return "1 MONTH"
 
     if time_period == "quarter":
-        return "-3 months"
+        return "3 MONTH"
 
     if time_period == "year":
-        return "-1 year"
+        return "1 YEAR"
 
 
 def sql_time_period_from_ts(time_period):
     if time_period == "day":
-        return "DATE(timestamp)"
+        return "timestamp::DATE"
 
     if time_period == "week":
-        return "strftime('%W', timestamp)"
+        return "EXTRACT(DOW FROM timestamp)"
 
     if time_period == "month":
-        return "strftime('%m', timestamp)"
+        return "EXTRACT(MONTH FROM timestamp)"
 
 
 def daterange(start_date, end_date):
@@ -67,13 +67,12 @@ def fill_blanks(time_period, rows):
     all_rows = []
 
     for d in daterange(start_date(time_period), date.today()):
-        ts = d.strftime("%Y-%m-%d")
-        existing_row = next(filter(lambda row: row[0] == ts, rows), None)
+        existing_row = next(filter(lambda row: row[0] == d, rows), None)
         if existing_row != None:
             all_rows.append(existing_row)
             continue
 
-        blank_row = (ts,) + tuple(0 for _ in range(0, blank_cols))
+        blank_row = (d,) + tuple(0 for _ in range(0, blank_cols))
         all_rows.append(blank_row)
 
     return all_rows
