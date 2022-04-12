@@ -5,6 +5,7 @@ import datetime
 
 import statistics
 import ingestion
+import coingecko
 
 app = Flask(__name__)
 
@@ -22,3 +23,4 @@ def index():
 
 
 ingestion.ingest_in_background()
+coingecko.cache_warm_up()

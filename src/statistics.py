@@ -28,7 +28,7 @@ def mention_growth_coins(conn, time_increment, time_period):
 def trending_coins(conn):
     return list(
         map(
-            lambda tc: get_coin_data(conn, tc["item"]["symbol"], "week"),
+            lambda coin: get_coin_data(conn, coin["item"]["symbol"], "week"),
             coingecko.get_coingecko_trending_data(),
         )
     )
