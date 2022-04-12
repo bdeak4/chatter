@@ -1,5 +1,5 @@
 {
-  "subs": ["cryptocurrency"],
+  "subreddits": ["cryptocurrency"],
   "symbol_blocklist": [
     "HODL",
     "DYOR",

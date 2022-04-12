@@ -1,5 +1,5 @@
 import helpers
-import ingestion
+import coingecko
 
 
 def mention_growth_coins_by_time_period(con):
@@ -29,7 +29,7 @@ def trending_coins(con):
     return list(
         map(
             lambda tc: get_coin_data(con, tc["item"]["symbol"], "week"),
-            ingestion.get_coingecko_trending_data(),
+            coingecko.get_coingecko_trending_data(),
         )
     )
 
@@ -76,7 +76,7 @@ def get_coin_data(con, symbol, time_period):
         "mentions": map(lambda m: str(m[1]), mentions_by_date),
         "price": map(str, get_price_by_symbol_and_time_period(symbol, time_period)),
         "url": "https://www.coingecko.com/en/coins/"
-        + ingestion.get_coingecko_coin_data_by_symbol(symbol)["id"],
+        + coingecko.get_coingecko_coin_data_by_symbol(symbol)["id"],
     }
 
 
@@ -123,7 +123,7 @@ def total_market_cap_by_time_period():
 
 def total_market_cap(time_period):
     number_of_data_points = helpers.time_period_len(time_period)
-    market_cap_by_date = ingestion.get_coingecko_market_cap_data()[
+    market_cap_by_date = coingecko.get_coingecko_market_cap_data()[
         -number_of_data_points:
     ]
     return list(map(lambda d: int(d[1]), market_cap_by_date))
@@ -140,7 +140,7 @@ def btc_price_by_time_period():
 
 def get_price_by_symbol_and_time_period(symbol, time_period):
     number_of_data_points = helpers.time_period_len(time_period)
-    price_by_data_point = ingestion.get_coingecko_price_data_by_symbol(symbol)[
+    price_by_data_point = coingecko.get_coingecko_price_data_by_symbol(symbol)[
         -number_of_data_points:
     ]
     return list(map(lambda d: float(d[1]), price_by_data_point))
