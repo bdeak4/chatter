@@ -14,7 +14,7 @@ import coingecko
 config = json.loads(open("../config.json").read())
 secrets = json.loads(open("../secrets.json").read())
 symbol_regex = re.compile(r"\b[A-Z]{1,6}\b")
-con = psycopg2.connect(os.getenv("POSTGRES_URL"))
+conn = psycopg2.connect(os.getenv("POSTGRES_URL"))
 
 
 def ingest(content_type, get_text):
@@ -64,7 +64,7 @@ def analyze_text(text):
 
 
 def insert_symbol(symbol, content_type, polarity, subjectivity):
-    cur = con.cursor()
+    cur = conn.cursor()
     cur.execute(
         """
         INSERT INTO mentions (symbol, timestamp, content_type, polarity, subjectivity)
@@ -72,7 +72,7 @@ def insert_symbol(symbol, content_type, polarity, subjectivity):
         """,
         (symbol, content_type, polarity, subjectivity),
     )
-    con.commit()
+    conn.commit()
 
 
 def ingest_in_background():

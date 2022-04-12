@@ -2,16 +2,16 @@ import helpers
 import coingecko
 
 
-def mention_growth_coins_by_time_period(con):
+def mention_growth_coins_by_time_period(conn):
     return [
-        ("past week", mention_growth_coins(con, "day", "week")),
-        ("past month", mention_growth_coins(con, "week", "month")),
-        ("coingecko trending", trending_coins(con)),
+        ("past week", mention_growth_coins(conn, "day", "week")),
+        ("past month", mention_growth_coins(conn, "week", "month")),
+        ("coingecko trending", trending_coins(conn)),
     ]
 
 
-def mention_growth_coins(con, time_increment, time_period):
-    cur = con.cursor()
+def mention_growth_coins(conn, time_increment, time_period):
+    cur = conn.cursor()
     cur.execute(
         f"""
         SELECT symbol, AVG(growth) AS avg_growth
@@ -22,20 +22,20 @@ def mention_growth_coins(con, time_increment, time_period):
         """
     )
 
-    return list(map(lambda c: get_coin_data(con, c[0], time_period), cur.fetchall()))
+    return list(map(lambda c: get_coin_data(conn, c[0], time_period), cur.fetchall()))
 
 
-def trending_coins(con):
+def trending_coins(conn):
     return list(
         map(
-            lambda tc: get_coin_data(con, tc["item"]["symbol"], "week"),
+            lambda tc: get_coin_data(conn, tc["item"]["symbol"], "week"),
             coingecko.get_coingecko_trending_data(),
         )
     )
 
 
-def get_coin_data(con, symbol, time_period):
-    cur = con.cursor()
+def get_coin_data(conn, symbol, time_period):
+    cur = conn.cursor()
     cur.execute(
         f"""
         SELECT pol_positive, pol_neutral, pol_negative,
@@ -79,25 +79,25 @@ def get_coin_data(con, symbol, time_period):
     }
 
 
-def total_charts(con):
+def total_charts(conn):
     return [
-        ("total mentions", total_mentions_by_time_period(con)),
+        ("total mentions", total_mentions_by_time_period(conn)),
         ("total market cap", total_market_cap_by_time_period()),
         ("btc price", btc_price_by_time_period()),
     ]
 
 
-def total_mentions_by_time_period(con):
+def total_mentions_by_time_period(conn):
     return {
-        "week": map(str, total_mentions(con, "week")),
-        "month": map(str, total_mentions(con, "month")),
-        "quarter": map(str, total_mentions(con, "quarter")),
-        "year": map(str, total_mentions(con, "year")),
+        "week": map(str, total_mentions(conn, "week")),
+        "month": map(str, total_mentions(conn, "month")),
+        "quarter": map(str, total_mentions(conn, "quarter")),
+        "year": map(str, total_mentions(conn, "year")),
     }
 
 
-def total_mentions(con, time_period):
-    cur = con.cursor()
+def total_mentions(conn, time_period):
+    cur = conn.cursor()
     cur.execute(
         """
         SELECT timestamp::DATE, COUNT(*)
@@ -145,15 +145,15 @@ def get_price_by_symbol_and_time_period(symbol, time_period):
     return list(map(lambda d: float(d[1]), price_by_data_point))
 
 
-def weekly_count_by_content_type(con):
+def weekly_count_by_content_type(conn):
     return {
-        "submission": count(con, "week", "submission"),
-        "comment": count(con, "week", "comment"),
+        "submission": count(conn, "week", "submission"),
+        "comment": count(conn, "week", "comment"),
     }
 
 
-def count(con, time_period, content_type):
-    cur = con.cursor()
+def count(conn, time_period, content_type):
+    cur = conn.cursor()
     cur.execute(
         """
         SELECT COUNT(*)

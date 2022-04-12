@@ -4,8 +4,8 @@ import helpers
 
 
 def init():
-    with psycopg2.connect(os.getenv("POSTGRES_URL")) as con:
-        cur = con.cursor()
+    with psycopg2.connect(os.getenv("POSTGRES_URL")) as conn:
+        cur = conn.cursor()
         cur.execute(
             """
             CREATE TABLE IF NOT EXISTS mentions (
@@ -20,7 +20,7 @@ def init():
         cur.execute(get_stats_view("day", "week"))
         cur.execute(get_stats_view("week", "month"))
         cur.execute(get_stats_view("month", "year"))
-        con.commit()
+        conn.commit()
 
 
 def get_stats_view(time_increments, time_period):
