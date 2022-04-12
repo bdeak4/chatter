@@ -112,6 +112,10 @@ h2 {
   stroke-width: 3px;
 }
 
+.line-chart--big {
+  height: 150px;
+}
+
 .total {
   display: flex;
   margin-top: 24px;

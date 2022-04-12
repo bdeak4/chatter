@@ -47,7 +47,6 @@ document.querySelectorAll(".line-chart.line-chart--big").forEach((el) => {
     el,
     { series: [values] },
     {
-      height: 150,
       fullWidth: true,
       showPoint: false,
       axisX: {

@@ -1,8 +1,7 @@
 from flask import Flask, render_template
-import psycopg2
-import os
 import datetime
 
+import database
 import statistics
 import ingestion
 import coingecko
@@ -12,7 +11,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    with psycopg2.connect(os.getenv("POSTGRES_URL")) as conn:
+    with database.get_conn() as conn:
         return render_template(
             "index.jinja",
             mention_growth_coins=statistics.mention_growth_coins_by_time_period(conn),
@@ -22,5 +21,6 @@ def index():
         )
 
 
+database.migrate()
 ingestion.ingest_in_background()
 coingecko.cache_warm_up()

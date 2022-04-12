@@ -3,8 +3,12 @@ import os
 import helpers
 
 
-def init():
-    with psycopg2.connect(os.getenv("POSTGRES_URL")) as conn:
+def get_conn():
+    return psycopg2.connect(os.getenv("POSTGRES_URL"))
+
+
+def migrate():
+    with get_conn() as conn:
         cur = conn.cursor()
         cur.execute(
             """

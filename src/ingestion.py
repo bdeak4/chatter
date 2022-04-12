@@ -4,8 +4,6 @@ import json
 import re
 import praw
 import textblob
-import psycopg2
-import os
 import multiprocessing
 
 import database
@@ -14,7 +12,7 @@ import coingecko
 config = json.loads(open("../config.json").read())
 secrets = json.loads(open("../secrets.json").read())
 symbol_regex = re.compile(r"\b[A-Z]{1,6}\b")
-conn = psycopg2.connect(os.getenv("POSTGRES_URL"))
+conn = database.get_conn()
 
 
 def ingest(content_type, get_text):
@@ -76,8 +74,6 @@ def insert_symbol(symbol, content_type, polarity, subjectivity):
 
 
 def ingest_in_background():
-    database.init()
-
     ingest_args = [
         ("comment", lambda c: c.body),
         ("submission", lambda s: s.title + "\n" + s.selftext),
