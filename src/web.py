@@ -21,6 +21,8 @@ def index():
         )
 
 
-database.migrate()
-ingestion.ingest_in_background()
-coingecko.cache_warm_up()
+@app.before_first_request
+def setup():
+    database.migrate()
+    ingestion.ingest_in_background()
+    coingecko.cache_warm_up()
