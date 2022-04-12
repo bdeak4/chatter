@@ -1,10 +1,11 @@
 from flask import Flask, render_template
+import os
 import datetime
 
 import database
 import statistics
-import ingestion
-import coingecko
+import wsgi
+
 
 app = Flask(__name__)
 
@@ -23,6 +24,5 @@ def index():
 
 @app.before_first_request
 def setup():
-    database.migrate()
-    ingestion.ingest_in_background()
-    coingecko.cache_warm_up()
+    if os.getenv("FLASK_ENV") == "development":
+        wsgi.on_starting(None)
