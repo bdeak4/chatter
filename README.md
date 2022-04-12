@@ -9,6 +9,7 @@ Development:
 ```bash
 $ git clone https://github.com/bdeak4/chatter
 $ cd chatter
+$ mv .env.empty .env
 $ docker-compose build
 $ docker-compose up
 ```
