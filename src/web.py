@@ -4,9 +4,9 @@ import datetime
 
 import statistics
 import ingestion
-import database
 
 app = Flask(__name__)
+
 
 @app.route("/")
 def index():
@@ -20,5 +20,4 @@ def index():
         )
 
 
-database.init()
 ingestion.ingest_in_background()
