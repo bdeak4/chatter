@@ -5,12 +5,12 @@ import re
 import praw
 import textblob
 import multiprocessing
+import os
 
 import database
 import coingecko
 
 config = json.loads(open("../config.json").read())
-secrets = json.loads(open("../secrets.json").read())
 symbol_regex = re.compile(r"\b[A-Z]{1,6}\b")
 conn = database.get_conn()
 
@@ -48,8 +48,8 @@ def ingest(content_type, get_text):
 
 def get_praw_instance(content_type):
     return praw.Reddit(
-        client_id=secrets["client_id"],
-        client_secret=secrets["client_secret"],
+        client_id=os.getenv("REDDIT_CLIENT_ID"),
+        client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
         user_agent=f"chatter_{content_type}s",
     ).subreddit("+".join(config["subreddits"]))
 
