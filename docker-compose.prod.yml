@@ -1,7 +1,14 @@
 version: "3"
 
 services:
+  db:
+    restart: unless-stopped
+
+  cache:
+    restart: unless-stopped
+
   web:
     command: gunicorn -c wsgi.py web:app
+    restart: unless-stopped
     environment:
       FLASK_ENV: production
