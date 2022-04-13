@@ -3,6 +3,5 @@ version: "3"
 services:
   web:
     command: gunicorn -c wsgi.py web:app
-    volumes: []
     environment:
       FLASK_ENV: production
