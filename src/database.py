@@ -29,9 +29,10 @@ def migrate():
 
 def get_stats_view(time_increments, time_period):
     return f"""
+        DROP VIEW mention_stats_by_{time_increments};
         CREATE OR REPLACE VIEW mention_stats_by_{time_increments} AS
         SELECT *,
-            1.0 * total / LAG(total) OVER (PARTITION BY symbol ORDER BY time_period) AS growth
+            1.0 * total / LAG(total) OVER (PARTITION BY symbol ORDER BY time_period) * sqrt(total) AS growth
         FROM (
             SELECT symbol,
                 {helpers.sql_time_period_from_ts(time_increments)}      AS time_period,
@@ -46,5 +47,5 @@ def get_stats_view(time_increments, time_period):
             FROM mentions
             WHERE timestamp >= NOW() - INTERVAL '{helpers.sql_time_interval(time_period)}'
             GROUP BY symbol, time_period
-        ) AS mentions
+        ) AS mentions;
     """

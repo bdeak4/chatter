@@ -193,5 +193,4 @@ def _set_statistics_data(conn):
         "total_charts": total_charts(conn),
         "weekly_count": weekly_count_by_content_type(conn),
     }
-    print(data)
     cache.set("_statistics_data", json.dumps(data), ex=600)
