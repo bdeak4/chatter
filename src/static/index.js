@@ -56,7 +56,10 @@ document.querySelectorAll(".line-chart.line-chart--big").forEach((el) => {
       axisY: {
         offset: 24,
         labelInterpolationFnc: (value) =>
-          Humanize.compactInteger(value, value > 1000000 ? 1 : 0),
+          Humanize.compactInteger(
+            value,
+            value > 1000000 || (value > 1000 && value < 10000) ? 1 : 0
+          ),
       },
     }
   );
