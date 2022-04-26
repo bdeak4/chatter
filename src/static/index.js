@@ -58,7 +58,7 @@ document.querySelectorAll(".line-chart.line-chart--big").forEach((el) => {
         labelInterpolationFnc: (value) =>
           Humanize.compactInteger(
             value,
-            value > 1000000 || (value > 1000 && value < 10000) ? 1 : 0
+            value >= 1000000 || (value >= 1000 && value < 10000) ? 1 : 0
           ),
       },
     }
