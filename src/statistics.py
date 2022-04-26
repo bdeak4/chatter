@@ -1,5 +1,12 @@
 import helpers
 import coingecko
+import json
+import os
+import multiprocessing
+import redis
+
+config = json.loads(open("../config.json").read())
+cache = redis.from_url(os.getenv("REDIS_URL"))
 
 
 def mention_growth_coins_by_time_period(conn):
@@ -72,8 +79,10 @@ def get_coin_data(conn, symbol, time_period):
         "sub_objective": data[4],
         "ct_submission": data[5],
         "ct_comment": data[6],
-        "mentions": map(lambda m: str(m[1]), mentions_by_date),
-        "price": map(str, get_price_by_symbol_and_time_period(symbol, time_period)),
+        "mentions": list(map(lambda m: str(m[1]), mentions_by_date)),
+        "price": list(
+            map(str, get_price_by_symbol_and_time_period(symbol, time_period))
+        ),
         "url": "https://www.coingecko.com/en/coins/"
         + coingecko.get_coingecko_coin_data_by_symbol(symbol)["id"],
     }
@@ -89,10 +98,10 @@ def total_charts(conn):
 
 def total_mentions_by_time_period(conn):
     return {
-        "week": map(str, total_mentions(conn, "week")),
-        "month": map(str, total_mentions(conn, "month")),
-        "quarter": map(str, total_mentions(conn, "quarter")),
-        "year": map(str, total_mentions(conn, "year")),
+        "week": list(map(str, total_mentions(conn, "week"))),
+        "month": list(map(str, total_mentions(conn, "month"))),
+        "quarter": list(map(str, total_mentions(conn, "quarter"))),
+        "year": list(map(str, total_mentions(conn, "year"))),
     }
 
 
@@ -113,10 +122,10 @@ def total_mentions(conn, time_period):
 
 def total_market_cap_by_time_period():
     return {
-        "week": map(str, total_market_cap("week")),
-        "month": map(str, total_market_cap("month")),
-        "quarter": map(str, total_market_cap("quarter")),
-        "year": map(str, total_market_cap("year")),
+        "week": list(map(str, total_market_cap("week"))),
+        "month": list(map(str, total_market_cap("month"))),
+        "quarter": list(map(str, total_market_cap("quarter"))),
+        "year": list(map(str, total_market_cap("year"))),
     }
 
 
@@ -130,10 +139,12 @@ def total_market_cap(time_period):
 
 def btc_price_by_time_period():
     return {
-        "week": map(str, get_price_by_symbol_and_time_period("BTC", "week")),
-        "month": map(str, get_price_by_symbol_and_time_period("BTC", "month")),
-        "quarter": map(str, get_price_by_symbol_and_time_period("BTC", "quarter")),
-        "year": map(str, get_price_by_symbol_and_time_period("BTC", "year")),
+        "week": list(map(str, get_price_by_symbol_and_time_period("BTC", "week"))),
+        "month": list(map(str, get_price_by_symbol_and_time_period("BTC", "month"))),
+        "quarter": list(
+            map(str, get_price_by_symbol_and_time_period("BTC", "quarter"))
+        ),
+        "year": list(map(str, get_price_by_symbol_and_time_period("BTC", "year"))),
     }
 
 
@@ -164,3 +175,23 @@ def count(conn, time_period, content_type):
         (helpers.sql_time_interval(time_period), content_type),
     )
     return cur.fetchone()[0]
+
+
+def get_statistics_data(conn):
+    if not cache.exists("_statistics_data"):
+        _set_statistics_data(conn)
+
+    if cache.ttl("_statistics_data") < 300:
+        multiprocessing.Process(target=_set_statistics_data, args=(conn,)).start()
+
+    return json.loads(cache.get("_statistics_data"))
+
+
+def _set_statistics_data(conn):
+    data = {
+        "mention_growth_coins": mention_growth_coins_by_time_period(conn),
+        "total_charts": total_charts(conn),
+        "weekly_count": weekly_count_by_content_type(conn),
+    }
+    print(data)
+    cache.set("_statistics_data", json.dumps(data), ex=600)

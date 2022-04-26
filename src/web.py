@@ -13,11 +13,12 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     with database.get_conn() as conn:
+        stats = statistics.get_statistics_data(conn)
         return render_template(
             "index.jinja",
-            mention_growth_coins=statistics.mention_growth_coins_by_time_period(conn),
-            total_charts=statistics.total_charts(conn),
-            weekly_count=statistics.weekly_count_by_content_type(conn),
+            mention_growth_coins=stats["mention_growth_coins"],
+            total_charts=stats["total_charts"],
+            weekly_count=stats["weekly_count"],
             current_year=datetime.date.today().year,
         )
 
