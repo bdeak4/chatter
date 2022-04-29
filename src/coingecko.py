@@ -63,7 +63,10 @@ def get_coingecko_market_cap_data():
 
 def _set_coingecko_market_cap_data():
     r = requests.get(
-        "https://www.coingecko.com/market_cap/total_charts_data?vs_currency=usd"
+        "https://www.coingecko.com/market_cap/total_charts_data?vs_currency=usd",
+        headers={
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0",
+        },
     )
     if r.ok:
         data = json.dumps(r.json()["stats"])
