@@ -9,14 +9,12 @@ Development:
 ```bash
 $ git clone https://github.com/bdeak4/chatter
 $ cd chatter
-$ mv .env.example .env
-$ docker-compose build
-$ docker-compose up
+$ cp .env.example .env
+$ docker-compose up --build
 ```
 
 Production:
 
 ```bash
-$ docker-compose build
-$ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+$ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
 ```
