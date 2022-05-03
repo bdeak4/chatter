@@ -1,5 +1,6 @@
 import helpers
 import coingecko
+import database
 import json
 import os
 import multiprocessing
@@ -177,17 +178,18 @@ def count(conn, time_period, content_type):
     return cur.fetchone()[0]
 
 
-def get_statistics_data(conn):
+def get_statistics_data():
     if not cache.exists("_statistics_data"):
-        _set_statistics_data(conn)
+        _set_statistics_data()
 
     if cache.ttl("_statistics_data") < 300:
-        multiprocessing.Process(target=_set_statistics_data, args=(conn,)).start()
+        multiprocessing.Process(target=_set_statistics_data).start()
 
     return json.loads(cache.get("_statistics_data"))
 
 
-def _set_statistics_data(conn):
+def _set_statistics_data():
+    conn = database.get_conn()
     data = {
         "mention_growth_coins": mention_growth_coins_by_time_period(conn),
         "total_charts": total_charts(conn),

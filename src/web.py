@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    stats = statistics.get_statistics_data(database.get_conn())
+    stats = statistics.get_statistics_data()
     return render_template(
         "index.jinja",
         mention_growth_coins=stats["mention_growth_coins"],
