@@ -53,7 +53,9 @@ def _set_coingecko_price_data_by_symbol(symbol):
         f"https://api.coingecko.com/api/v3/coins/{coin['id']}/market_chart?vs_currency=usd&days={days}&interval=daily"
     )
     if r.ok:
-        data = list(map(lambda p: [p[0], round(p[1], 2)], r.json()["prices"]))
+        data = list(
+            map(lambda p: [p[0], round(p[1], 2 if p[1] > 1 else 6)], r.json()["prices"])
+        )
         cache.set(f"_coingecko_price_data={symbol}", json.dumps(data), ex=hours(2))
 
 
