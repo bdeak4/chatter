@@ -3,20 +3,20 @@
 :root {
   --color-white: #fff;
   --color-black: #000;
-  --color-bg-teal-50: rgb(240, 253, 250);
-  --color-bg-teal-100: rgb(204, 251, 241);
-  --color-bg-teal-200: rgb(153, 246, 228);
-  --color-bg-teal-300: rgb(94, 234, 212);
-  --color-bg-teal-400: rgb(45, 212, 191);
-  --color-bg-teal-500: rgb(20, 184, 166);
-  --color-bg-teal-600: rgb(13, 148, 136);
-  --color-bg-teal-700: rgb(15, 118, 110);
-  --color-bg-teal-800: rgb(17, 94, 89);
-  --color-bg-teal-900: rgb(19, 78, 74);
+  --color-teal-50: rgb(240, 253, 250);
+  --color-teal-100: rgb(204, 251, 241);
+  --color-teal-200: rgb(153, 246, 228);
+  --color-teal-300: rgb(94, 234, 212);
+  --color-teal-400: rgb(45, 212, 191);
+  --color-teal-500: rgb(20, 184, 166);
+  --color-teal-600: rgb(13, 148, 136);
+  --color-teal-700: rgb(15, 118, 110);
+  --color-teal-800: rgb(17, 94, 89);
+  --color-teal-900: rgb(19, 78, 74);
 }
 
 ::selection {
-  background-color: var(--color-bg-teal-700);
+  background-color: var(--color-teal-700);
 }
 
 * {
@@ -35,7 +35,7 @@ body {
 
 a {
   color: var(--color-white);
-  text-decoration-color: var(--color-bg-teal-400);
+  text-decoration-color: var(--color-teal-400);
 }
 
 a:hover {
@@ -75,31 +75,31 @@ h2 {
 }
 
 .ct-series-a .ct-slice-donut {
-  stroke: var(--color-bg-teal-500);
+  stroke: var(--color-teal-500);
 }
 
 .ct-series-b .ct-slice-donut {
-  stroke: var(--color-bg-teal-700);
+  stroke: var(--color-teal-700);
 }
 
 .pie-chart--tricolor .ct-series-b .ct-slice-donut {
-  stroke: var(--color-bg-teal-200);
+  stroke: var(--color-teal-200);
 }
 
 .pie-chart--tricolor .ct-series-c .ct-slice-donut {
-  stroke: var(--color-bg-teal-700);
+  stroke: var(--color-teal-700);
 }
 
 .ct-chart-line .ct-grid {
-  stroke: var(--color-bg-teal-900);
+  stroke: var(--color-teal-900);
 }
 
 .ct-chart-line .ct-label {
-  color: var(--color-bg-teal-700);
+  color: var(--color-teal-700);
 }
 
 .ct-chart-line .ct-line {
-  stroke: var(--color-bg-teal-500);
+  stroke: var(--color-teal-500);
 }
 
 .line-chart--small {
@@ -150,7 +150,7 @@ h2 {
 .tab:hover,
 .tab--active {
   text-decoration: underline;
-  text-decoration-color: var(--color-bg-teal-400);
+  text-decoration-color: var(--color-teal-400);
 }
 
 .tab-nav {
