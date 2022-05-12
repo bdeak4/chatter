@@ -2,6 +2,8 @@
 
 ...which cryptocurrencies are people talking about today?
 
+![](https://bdeak.net/img/chatter.png)
+
 ## Setup
 
 Development:
