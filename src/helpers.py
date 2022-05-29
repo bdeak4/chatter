@@ -35,28 +35,22 @@ def time_period_len(time_period):
     return len(list(daterange(start_date(time_period), date.today())))
 
 
-def date_months_ago(n):
-    today = date.today()
-    month = today.month - n
-    year = today.year
-    while month < 1:
-        month += 12
-        year -= 1
-    return date(year, month, today.day)
+def date_days_ago(n):
+    return date.today() - timedelta(days=n)
 
 
 def start_date(time_period):
     if time_period == "week":
-        return date.today() - timedelta(days=7)
+        return date_days_ago(7)
 
     if time_period == "month":
-        return date_months_ago(1)
+        return date_days_ago(1 * 30)
 
     if time_period == "quarter":
-        return date_months_ago(3)
+        return date_days_ago(3 * 30)
 
     if time_period == "year":
-        return date_months_ago(12)
+        return date_days_ago(365)
 
 
 def fill_blanks(time_period, rows):

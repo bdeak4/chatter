@@ -85,7 +85,7 @@ def get_coin_data(conn, symbol, time_period):
             map(str, get_price_by_symbol_and_time_period(symbol, time_period))
         ),
         "url": "https://www.coingecko.com/en/coins/"
-        + (coingecko.get_coingecko_coin_data_by_symbol(symbol) or {}).get("id"),
+        + (coingecko.get_coingecko_coin_data_by_symbol(symbol) or {}).get("id", ""),
     }
 
 
