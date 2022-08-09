@@ -1,10 +1,10 @@
-import Chartist from "https://cdn.skypack.dev/chartist";
+import { PieChart, LineChart } from "https://cdn.skypack.dev/chartist";
 import Humanize from "https://cdn.skypack.dev/humanize-plus";
 
 document.querySelectorAll(".pie-chart").forEach((el) => {
   const values = el.dataset.values.split(",").map((v) => parseInt(v));
 
-  new Chartist.Pie(
+  new PieChart(
     el,
     { series: values },
     {
@@ -19,7 +19,7 @@ document.querySelectorAll(".pie-chart").forEach((el) => {
 document.querySelectorAll(".line-chart.line-chart--small").forEach((el) => {
   const values = el.dataset.values.split(",").map((v) => parseFloat(v));
 
-  new Chartist.Line(
+  new LineChart(
     el,
     { series: [values] },
     {
@@ -43,7 +43,7 @@ document.querySelectorAll(".line-chart.line-chart--small").forEach((el) => {
 document.querySelectorAll(".line-chart.line-chart--big").forEach((el) => {
   const values = el.dataset.values.split(",").map((v) => parseFloat(v));
 
-  new Chartist.Line(
+  new LineChart(
     el,
     { series: [values] },
     {
