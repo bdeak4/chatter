@@ -12,4 +12,4 @@ COPY . .
 
 WORKDIR /app/src
 
-CMD [ "flask", "run" ]
+CMD ["sh", "-c", "[ $FLASK_ENV = 'production' ] && gunicorn -c wsgi.py web:app || flask run"]

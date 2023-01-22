@@ -1,35 +1,18 @@
 version: "3"
 
 services:
-  db:
-    image: postgres:14
-    restart: on-failure
-    environment:
-      POSTGRES_DB: chatter
-      POSTGRES_USER: chatter
-      POSTGRES_PASSWORD: chatter
-    ports:
-      - 5003:5432
-
   cache:
     image: redis:6
     restart: on-failure
-    ports:
-      - 5004:6379
 
   web:
     build: .
     volumes:
       - .:/app
     restart: on-failure
-    environment:
-      FLASK_ENV: development
-      POSTGRES_URL: "postgres://chatter:chatter@db:5432/chatter"
-      REDIS_URL: "redis://cache:6379/"
-      REDDIT_CLIENT_ID: "${REDDIT_CLIENT_ID?err}"
-      REDDIT_CLIENT_SECRET: "${REDDIT_CLIENT_SECRET?err}"
     ports:
       - 4002:5000
+    env_file:
+      - .env
     depends_on:
-      - db
       - cache

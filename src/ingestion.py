@@ -12,10 +12,10 @@ import coingecko
 
 config = json.loads(open("../config.json").read())
 symbol_regex = re.compile(r"\b[A-Z]{1,6}\b")
-conn = database.get_conn()
 
 
 def ingest(content_type, get_text):
+    conn = database.get_conn()
     try:
         reddit = get_praw_instance(content_type)
 
@@ -38,7 +38,7 @@ def ingest(content_type, get_text):
             polarity, subjectivity = analyze_text(text)
 
             for symbol in symbols:
-                insert_symbol(symbol, content_type, polarity, subjectivity)
+                insert_symbol(symbol, content_type, polarity, subjectivity, conn)
 
     except Exception as e:
         logging.exception(e)
@@ -61,7 +61,7 @@ def analyze_text(text):
     return (polarity, subjectivity)
 
 
-def insert_symbol(symbol, content_type, polarity, subjectivity):
+def insert_symbol(symbol, content_type, polarity, subjectivity, conn):
     cur = conn.cursor()
     cur.execute(
         """
