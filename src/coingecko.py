@@ -52,11 +52,15 @@ def _set_coingecko_price_data_by_symbol(symbol):
     r = requests.get(
         f"https://api.coingecko.com/api/v3/coins/{coin['id']}/market_chart?vs_currency=usd&days={days}&interval=daily"
     )
-    if r.ok:
-        data = list(
-            map(lambda p: [p[0], round(p[1], 2 if p[1] > 1 else 6)], r.json()["prices"])
-        )
-        cache.set(f"_coingecko_price_data={symbol}", json.dumps(data), ex=hours(2))
+    if not r.ok:
+        print(r.text, flush=True)
+        cache.set(f"_coingecko_price_data={symbol}", "[]", ex=hours(1))
+        return
+
+    data = list(
+        map(lambda p: [p[0], round(p[1], 2 if p[1] > 1 else 6)], r.json()["prices"])
+    )
+    cache.set(f"_coingecko_price_data={symbol}", json.dumps(data), ex=hours(2))
 
 
 def get_coingecko_market_cap_data():
