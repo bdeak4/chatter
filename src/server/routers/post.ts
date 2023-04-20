@@ -44,11 +44,7 @@ export const postRouter = router({
         // get an extra item at the end which we'll use as next cursor
         take: limit + 1,
         where: {},
-        cursor: cursor
-          ? {
-              id: cursor,
-            }
-          : undefined,
+        cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
           createdAt: 'desc',
         },
