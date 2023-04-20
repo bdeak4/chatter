@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "generate": "prisma generate",
-    "prisma-studio": "prisma studio",
+    "prisma-studio": "BROWSER=none prisma studio",
     "db-seed": "prisma db seed",
     "db-reset": "prisma migrate dev reset",
     "dx:next": "run-s migrate-dev db-seed && next dev",
