@@ -9,7 +9,7 @@ const { z } = require('zod');
 /*eslint sort-keys: "error"*/
 const envSchema = z.object({
   DATABASE_URL: z.string().url(),
-  NODE_ENV: z.enum(['development', 'staging', 'production']),
+  NODE_ENV: z.enum(['development', 'test', 'production']),
 });
 
 const env = envSchema.safeParse(process.env);
