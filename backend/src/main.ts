@@ -1,17 +1,16 @@
-import * as trpcExpress from "@trpc/server/adapters/express";
-import { createContext } from "./context";
-import { publicProcedure, router } from "./trpc";
 import express from "express";
-import { maintenanceRouter } from "./routers/maintenance";
-
-const app = express();
+import * as trpcExpress from "@trpc/server/adapters/express";
+import { router } from "./trpc";
+import { createContext } from "./context";
+import { maintenanceRouter } from "./routes/maintenance";
 
 const appRouter = router({
   maintenance: maintenanceRouter,
-  healthz: publicProcedure.query(async () => {
-    return "ok";
-  }),
 });
+
+export type AppRouter = typeof appRouter;
+
+const app = express();
 
 app.use(
   "/trpc",
@@ -21,7 +20,7 @@ app.use(
   })
 );
 
-const port = 4000;
+const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`[express] app listening on port ${port}`);
 });
