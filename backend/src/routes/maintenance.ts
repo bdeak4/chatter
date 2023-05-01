@@ -10,6 +10,7 @@ export const maintenanceRouter = router({
   echo: publicProcedure
     .input(z.object({ text: z.string() }))
     .query(async ({ input }) => {
+      log.info({ text: input.text }, "echo");
       return input.text;
     }),
 });
