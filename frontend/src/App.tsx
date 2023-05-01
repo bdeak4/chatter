@@ -1,31 +1,27 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { httpBatchLink } from "@trpc/client";
 import { useState } from "react";
+import { trpc } from "./trpc";
+import superjson from "superjson";
+import Page from "./page";
+import { env } from "./env";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      transformer: superjson,
+      links: [httpBatchLink({ url: env.VITE_TRPC_ENDPOINT })],
+    })
+  );
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          vite
-        </a>
-        <a href="https://react.dev" target="_blank">
-          react
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <h1>Vite + React</h1>
+        <Page />
+      </QueryClientProvider>
+    </trpc.Provider>
   );
 }
 
