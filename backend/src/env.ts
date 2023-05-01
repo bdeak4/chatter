@@ -1,9 +1,10 @@
 import * as dotenv from "dotenv";
 import { z } from "zod";
+import { log } from "./logger";
 
 dotenv.config();
 
-const envSchema = z.object({
+const schema = z.object({
   // express
   PORT: z.number().default(4000),
   NODE_ENV: z.enum(["development", "production"]),
@@ -11,16 +12,13 @@ const envSchema = z.object({
   DATABASE_URL: z.string().url(),
 });
 
-const parsedSchema = envSchema.safeParse(process.env);
+const parsed = schema.safeParse(process.env);
 
-if (!parsedSchema.success) {
-  console.error(
-    "Invalid environment variables:",
-    JSON.stringify(parsedSchema.error.format(), null, 4)
-  );
+if (!parsed.success) {
+  log.error(parsed.error.format(), "invalid environment variables");
   process.exit(1);
 }
 
-export const env = parsedSchema.data;
+export const env = parsed.data;
 
-console.log("env:", env);
+log.info(env, "environment variables");
