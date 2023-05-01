@@ -1,14 +1,7 @@
 import express from "express";
 import * as trpcExpress from "@trpc/server/adapters/express";
-import { router } from "./trpc";
 import { createContext } from "./context";
-import { maintenanceRouter } from "./routes/maintenance";
-
-const appRouter = router({
-  maintenance: maintenanceRouter,
-});
-
-export type AppRouter = typeof appRouter;
+import { appRouter } from "./router";
 
 const app = express();
 
