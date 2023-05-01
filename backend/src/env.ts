@@ -10,11 +10,14 @@ const schema = z.object({
   // prisma
   DATABASE_URL: z.string().url(),
   LOG_QUERY_THRESHOLD_MS: z.coerce.number().default(0),
-  // frontend
-  FRONTEND_ENDPOINT: z.string().url().default("http://localhost:5173"),
+  // app
+  CORS_ORIGINS: z.array(z.string().url()).default(["http://localhost:4001"]),
 });
 
-const parsed = schema.safeParse(process.env);
+const parsed = schema.safeParse({
+  ...process.env,
+  CORS_ORIGINS: process.env.CORS_ORIGINS?.split(","),
+});
 
 if (!parsed.success) {
   log.error(parsed.error.format(), "invalid environment variables");

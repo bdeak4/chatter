@@ -10,7 +10,7 @@ import { appRouter } from "./routes";
 const app = express();
 
 app.use(pino());
-app.use(cors({ origin: env.FRONTEND_ENDPOINT, credentials: true }));
+app.use(cors({ origin: env.CORS_ORIGINS }));
 
 app.use(
   "/trpc",
