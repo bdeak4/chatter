@@ -6,7 +6,7 @@ import { appRouter } from "./router";
 const app = express();
 
 app.use(
-  "/trpc",
+  "/api/trpc",
   trpcExpress.createExpressMiddleware({
     router: appRouter,
     createContext,
