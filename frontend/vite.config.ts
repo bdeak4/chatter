@@ -1,13 +1,9 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
+import ssr from "vite-plugin-ssr/plugin";
+import { UserConfig } from "vite";
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    port: 4001,
-  },
-  preview: {
-    port: 4001,
-  },
-});
+const config: UserConfig = {
+  plugins: [react(), ssr()],
+};
+
+export default config;
