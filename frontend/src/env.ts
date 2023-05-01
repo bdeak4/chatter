@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const schema = z.object({
-  VITE_TRPC_ENDPOINT: z.string().url().default("http://localhost:4000/trpc"),
+  VITE_TRPC_ENDPOINT: z.string().url().default("http://localhost:4001/trpc"),
 });
 
 const parsed = schema.safeParse(import.meta.env);
