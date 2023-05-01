@@ -1,3 +1,10 @@
 # chatter
 
-...have you ever wondered which cryptocurrencies are people talking about today?
+setup development environment:
+
+```sh
+cd backend
+yarn
+yarn dev:db-migrate
+yarn dev:server
+```
