@@ -2,6 +2,7 @@ import express from "express";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { createContext } from "./context";
 import { appRouter } from "./router";
+import { env } from "./env";
 
 const app = express();
 
@@ -13,7 +14,6 @@ app.use(
   })
 );
 
-const port = process.env.PORT || 4000;
-app.listen(port, () => {
-  console.log(`[express] app listening on port ${port}`);
+app.listen(env.PORT, () => {
+  console.log(`[express] app listening on port ${env.PORT}`);
 });
