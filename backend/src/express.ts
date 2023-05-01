@@ -1,10 +1,10 @@
 import express from "express";
 import pino from "pino-http";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { createContext } from "./context";
-import { appRouter } from "./router";
+import { router, createContext } from "./trpc";
 import { env } from "./env";
 import { log } from "./logger";
+import { appRouter } from "./routes";
 
 const app = express();
 

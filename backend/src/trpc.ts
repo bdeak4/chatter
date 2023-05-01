@@ -1,7 +1,14 @@
-import { initTRPC } from "@trpc/server";
+import { initTRPC, inferAsyncReturnType } from "@trpc/server";
+import { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { Context } from "./context";
+import { prisma } from "./prisma";
+
+export const createContext = (_opts: CreateExpressContextOptions) => ({
+  prisma,
+});
+
+export type Context = inferAsyncReturnType<typeof createContext>;
 
 const t = initTRPC.context<Context>().create({
   transformer: superjson,
