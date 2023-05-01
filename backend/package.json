@@ -1,6 +1,6 @@
 {
   "name": "chatter-backend",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "main": "src/express.ts",
   "license": "MIT",
   "scripts": {
