@@ -5,7 +5,7 @@ import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { createContext } from "./trpc";
 import { env } from "./env";
 import { log } from "./logger";
-import { appRouter } from "./routes";
+import { appRouter } from "./routes/_app";
 
 const app = express();
 

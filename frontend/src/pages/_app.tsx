@@ -1,25 +1,17 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink } from "@trpc/client";
 import { useState } from "react";
-import { trpc } from "./trpc";
-import superjson from "superjson";
-import Page from "./page";
-import { env } from "./env";
+import { createTRPCClient, trpc } from "../trpc";
+import { HomePage } from "./home";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
-  const [trpcClient] = useState(() =>
-    trpc.createClient({
-      transformer: superjson,
-      links: [httpBatchLink({ url: env.VITE_TRPC_ENDPOINT })],
-    })
-  );
+  const [trpcClient] = useState(() => createTRPCClient());
 
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <h1>Vite + React</h1>
-        <Page />
+        <HomePage />
       </QueryClientProvider>
     </trpc.Provider>
   );
