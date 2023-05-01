@@ -1,11 +1,9 @@
 import { inferAsyncReturnType } from "@trpc/server";
-import * as trpcExpress from "@trpc/server/adapters/express";
+import { CreateExpressContextOptions } from "@trpc/server/adapters/express";
+import { prisma } from "./prisma";
 
-export const createContext = ({
-  req,
-  res,
-}: trpcExpress.CreateExpressContextOptions) => ({
-  testingContext: "x",
+export const createContext = (_opts: CreateExpressContextOptions) => ({
+  prisma,
 });
 
 export type Context = inferAsyncReturnType<typeof createContext>;

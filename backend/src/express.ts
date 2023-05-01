@@ -1,6 +1,6 @@
 import express from "express";
 import pino from "pino-http";
-import * as trpcExpress from "@trpc/server/adapters/express";
+import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { createContext } from "./context";
 import { appRouter } from "./router";
 import { env } from "./env";
@@ -12,7 +12,7 @@ app.use(pino());
 
 app.use(
   "/api/trpc",
-  trpcExpress.createExpressMiddleware({
+  createExpressMiddleware({
     router: appRouter,
     createContext,
   })

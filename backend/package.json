@@ -4,19 +4,34 @@
   "main": "src/express.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_ENV=development npx tsx . | pino-pretty"
+    "// dev": "---------------------------------------------------------------",
+    "dev:server": "NODE_ENV=development tsx . | pino-pretty",
+    "dev:db-migrate": "prisma migrate dev --skip-generate --skip-seed",
+    "dev:db-seed": "prisma db seed | pino-pretty",
+    "dev": "yarn && yarn dev:db-migrate && yarn dev:db-seed && yarn dev:server",
+    "// prod": "--------------------------------------------------------------",
+    "prod:db-migrate": "prisma migrate deploy",
+    "// utils": "-------------------------------------------------------------",
+    "db-reset": "prisma migrate reset | pino-pretty",
+    "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "4.13.0",
     "@trpc/server": "^10.23.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "pino": "^8.11.0",
     "pino-http": "^8.3.3",
-    "pino-pretty": "^10.0.0",
     "superjson": "^1.12.3",
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@types/express": "^4.17.17"
+    "@types/express": "^4.17.17",
+    "pino-pretty": "^10.0.0",
+    "prisma": "^4.13.0",
+    "tsx": "^3.12.7"
   }
 }
