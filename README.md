@@ -4,9 +4,12 @@
 
 ## Development
 
-Node.js >=18 and yarn required to run project.
+**Dependencies**
 
-Backend:
+- Node.js >=18 and yarn
+- PostgreSQL >= 15
+
+**Backend**
 
 ```sh
 cd backend
@@ -17,7 +20,7 @@ yarn dev:server
 
 Backend API is now accessible on <http://localhost:4001/>
 
-Frontend:
+**Frontend**
 
 ```sh
 cd frontend
