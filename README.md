@@ -1,16 +1,35 @@
 # chatter
 
-...which cryptocurrencies are people talking about today?
+...have you ever wondered which cryptocurrencies are people talking about today?
 
-[![](https://bdeak.net/img/chatter.png)](https://chatter.bdeak.net)
+## Development
 
-## Setup
+**Dependencies**
 
+- Node.js >=18 and yarn
+- PostgreSQL >= 15
+
+**Backend**
+
+```sh
+cd backend
+yarn
+yarn dev:db-migrate
+yarn dev:server
 ```
-$ git clone https://github.com/bdeak4/chatter
-$ cd chatter
-$ cp .env.example .env
-$ docker compose up -d --build
+
+Backend API is now accessible on <http://localhost:4001/>
+
+**Frontend**
+
+```sh
+cd frontend
+yarn
+yarn dev:server
 ```
 
-App can now be accessed at [localhost:4002](http://localhost:4002).
+App is now accessible on <http://localhost:4000/>
+
+## Deployment
+
+tbd
