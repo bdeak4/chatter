@@ -1,17 +1,19 @@
 import express from "express";
 import pino from "pino-http";
+import cors from "cors";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { router, createContext } from "./trpc";
+import { createContext } from "./trpc";
 import { env } from "./env";
 import { log } from "./logger";
-import { appRouter } from "./routes";
+import { appRouter } from "./routes/_app";
 
 const app = express();
 
 app.use(pino());
+app.use(cors({ origin: env.CORS_ORIGINS }));
 
 app.use(
-  "/api/trpc",
+  "/trpc",
   createExpressMiddleware({
     router: appRouter,
     createContext,
