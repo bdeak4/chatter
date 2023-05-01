@@ -5,11 +5,11 @@ import { log } from "./logger";
 dotenv.config();
 
 const schema = z.object({
-  // express
-  PORT: z.number().default(4000),
-  NODE_ENV: z.enum(["development", "production"]),
+  PORT: z.coerce.number().default(4000),
+  NODE_ENV: z.enum(["development", "production"]).default("development"),
   // prisma
   DATABASE_URL: z.string().url(),
+  LOG_QUERY_THRESHOLD_MS: z.coerce.number().default(0),
 });
 
 const parsed = schema.safeParse(process.env);
