@@ -10,8 +10,6 @@ const schema = z.object({
   // prisma
   DATABASE_URL: z.string().url(),
   LOG_QUERY_THRESHOLD_MS: z.coerce.number().int().default(0),
-  // app
-  CORS_ORIGINS: z.array(z.string().url()).default(["http://localhost:4000"]),
 });
 
 const parsed = schema.safeParse({

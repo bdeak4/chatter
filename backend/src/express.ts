@@ -1,7 +1,7 @@
 import express from "express";
-import compression from "compression";
 import pino from "pino-http";
 import cors from "cors";
+import compression from "compression";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { createContext } from "./trpc";
 import { env } from "./env";
@@ -10,9 +10,9 @@ import { appRouter } from "./routes/_app";
 
 const app = express();
 
-app.use(compression());
 app.use(pino());
-app.use(cors({ origin: env.CORS_ORIGINS }));
+app.use(cors());
+app.use(compression());
 
 app.use(
   "/trpc",
