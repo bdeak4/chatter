@@ -7,8 +7,8 @@ if [ -z "$env" ]; then
 fi
 cd "$(dirname "$0")" || exit 1
 
-ssh_keys="../ssh-keys"
+project=$(basename "$(git rev-parse --show-toplevel)")
 
-ssh-keygen -t ed25519 -C "$env" -N "" -f "$ssh_keys/$env"
-mv "$ssh_keys/$env" "$ssh_keys/$env.enc"
-sops -e -i "$ssh_keys/$env.enc"
+ssh-keygen -t ed25519 -C "$project-$env" -N "" -f "../ssh-keys/$env"
+mv "../ssh-keys/$env" "../ssh-keys/$env.enc"
+sops -e -i "../ssh-keys/$env.enc"
