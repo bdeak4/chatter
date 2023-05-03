@@ -1,0 +1,28 @@
+service: chatter-backend
+image: bdeak4/chatter-backend
+
+registry:
+  server: ghcr.io
+  username: bdeak4
+  password:
+    - MRSK_REGISTRY_PASSWORD
+
+builder:
+  multiarch: false
+
+env:
+  clear:
+    LOG_QUERY_THRESHOLD_MS: 500
+  secret:
+    - DATABASE_URL
+
+audit_broadcast_cmd: ../infrastructure/scripts/audit-broadcast.sh
+
+traefik:
+  args:
+    accesslog: true
+    accesslog.format: json
+
+healthcheck:
+  path: /trpc/maintenance.healthz
+  port: 4001
