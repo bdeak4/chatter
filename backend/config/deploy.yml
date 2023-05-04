@@ -39,6 +39,9 @@ traefik:
   args:
     accesslog: true
     accesslog.format: json
+    accesslog.fields.headers.defaultmode: keep
+    accesslog.fields.headers.names.Authorization: drop
+    accesslog.fields.headers.names.Cookie: drop
 
 healthcheck:
   path: /trpc/maintenance.healthz

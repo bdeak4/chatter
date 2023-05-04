@@ -10,7 +10,6 @@ import { appRouter } from "./routes/_app";
 
 const app = express();
 
-app.use(pino({ logger: log }));
 app.use(cors());
 app.use(compression());
 
