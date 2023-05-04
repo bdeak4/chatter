@@ -1,4 +1,5 @@
 import { prisma } from "../src/prisma";
+import { log } from "../src/logger";
 
 async function main() {
   await prisma.user.create({
@@ -6,6 +7,7 @@ async function main() {
       name: "Admin",
     },
   });
+  log.info("seeded");
 }
 
 main()
@@ -13,7 +15,7 @@ main()
     await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e);
+    log.error(e);
     await prisma.$disconnect();
     process.exit(1);
   });

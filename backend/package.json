@@ -4,11 +4,12 @@
   "main": "src/express.ts",
   "license": "MIT",
   "scripts": {
-    "dev:db-migrate": "prisma migrate dev | pino-pretty",
-    "dev:db-reset": "prisma migrate reset | pino-pretty",
-    "dev:server": "tsx watch --clear-screen=false . | pino-pretty",
+    "dev:db-migrate": "prisma migrate dev",
+    "dev:server": "tsx watch --clear-screen=false .",
     "prod:db-migrate": "prisma migrate deploy",
     "prod:server": "tsx .",
+    "db-reset": "prisma migrate reset",
+    "db-seed": "prisma db seed",
     "postinstall": "prisma generate"
   },
   "prisma": {

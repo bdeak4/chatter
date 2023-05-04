@@ -1,6 +1,5 @@
 import * as dotenv from "dotenv";
 import { z } from "zod";
-import { log } from "./logger";
 
 dotenv.config();
 
@@ -12,16 +11,11 @@ const schema = z.object({
   LOG_QUERY_THRESHOLD_MS: z.coerce.number().int().default(0),
 });
 
-const parsed = schema.safeParse({
-  ...process.env,
-  CORS_ORIGINS: process.env.CORS_ORIGINS?.split(","),
-});
+const parsed = schema.safeParse(process.env);
 
 if (!parsed.success) {
-  log.error(parsed.error.format(), "invalid environment variables");
+  console.error("invalid environment variables", parsed.error.format());
   process.exit(1);
 }
 
 export const env = parsed.data;
-
-log.info(env, "environment variables");

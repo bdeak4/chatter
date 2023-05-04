@@ -10,7 +10,7 @@ import { appRouter } from "./routes/_app";
 
 const app = express();
 
-app.use(pino());
+app.use(pino({ logger: log }));
 app.use(cors());
 app.use(compression());
 
@@ -23,5 +23,8 @@ app.use(
 );
 
 app.listen(env.PORT, () => {
+  if (env.NODE_ENV === "development") {
+    log.info(env, "environment variables");
+  }
   log.info(`app listening on port ${env.PORT}`);
 });
