@@ -18,6 +18,23 @@ env:
 
 audit_broadcast_cmd: ../infrastructure/scripts/audit-broadcast.sh
 
+accessories:
+  promtail:
+    image: grafana/promtail
+    roles:
+      - web
+    cmd: -config.file=/etc/promtail/config.yaml -config.expand-env=true
+    env:
+      clear:
+        LOKI_HOST: logs-prod-012.grafana.net
+      secret:
+        - LOKI_USERNAME
+        - LOKI_PASSWORD
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    files:
+      - ./config/promtail.yaml:/etc/promtail/config.yaml
+
 traefik:
   args:
     accesslog: true
