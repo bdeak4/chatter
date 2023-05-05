@@ -20,10 +20,12 @@ audit_broadcast_cmd: ../infrastructure/scripts/audit-broadcast.sh
 
 accessories:
   promtail:
-    image: grafana/promtail
+    image: grafana/promtail:latest
     roles:
       - web
-    cmd: -config.file=/etc/promtail/config.yaml -config.expand-env=true
+    cmd: |
+      -config.file=/etc/promtail/config.yml \
+      -config.expand-env=true
     env:
       clear:
         LOKI_HOST: logs-prod-012.grafana.net
