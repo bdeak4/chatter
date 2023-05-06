@@ -44,7 +44,20 @@ traefik:
     accesslog.fields.headers.defaultmode: keep
     accesslog.fields.headers.names.Authorization: drop
     accesslog.fields.headers.names.Cookie: drop
+    metrics.prometheus: true
+    api.dashboard: true
+  options:
+    publish:
+      - 8080:8080
+  labels:
+    traefik.http.routers.dashboard.entrypoints: traefik
+    traefik.http.routers.dashboard.rule: PathPrefix(`/api`, `/dashboard`)
+    traefik.http.routers.dashboard.service: api@internal
+    traefik.http.routers.dashboard.middlewares: auth
+    traefik.http.middlewares.auth.basicauth.users: admin:$apr1$Uwv/xaLq$cOQR/Hla.bxBKlmfICqEh/
 
 healthcheck:
   path: /trpc/maintenance.healthz
   port: 4001
+
+audit_broadcast_cmd: ../infrastructure/scripts/audit-broadcast.sh
