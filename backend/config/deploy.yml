@@ -16,9 +16,64 @@ env:
   secret:
     - DATABASE_URL
 
-audit_broadcast_cmd: ../infrastructure/scripts/audit-broadcast.sh
-
 accessories:
+  redis:
+    image: redis:latest
+    port: 6379
+    volumes:
+      - /var/lib/redis:/data
+
+  prometheus:
+    image: prom/prometheus:latest
+    cmd: |
+      --config.file=/etc/prometheus/prometheus.yml \
+      --web.config.file=/etc/prometheus/web.yml
+    volumes:
+      - /var/lib/prometheus:/prometheus
+    files:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./config/prometheus-web.yml:/etc/prometheus/web.yml
+    options:
+      user: root
+    port: 9090
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    roles:
+      - web
+    cmd: |
+      --path.procfs=/host/proc \
+      --path.sysfs=/host/sys \
+      --path.rootfs=/rootfs \
+      --collector.filesystem.mount-points-exclude="^/(sys|proc|dev|host|etc)($$|/)" \
+      --collector.systemd \
+      --collector.processes
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    port: 9100
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:latest
+    port: 9115
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - /var/lib/grafana:/var/lib/grafana
+    options:
+      user: root
+    port: 3000
+
+  # loki:
+  #   image: grafana/loki:latest
+  #   cmd: |
+  #     -config.file=/etc/loki/config.yaml
+  #   files:
+  #     - ./config/loki.yml:/etc/loki/config.yaml
+  #   port: 3100
+
   promtail:
     image: grafana/promtail:latest
     roles:
@@ -35,7 +90,7 @@ accessories:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     files:
-      - ./config/promtail.yaml:/etc/promtail/config.yaml
+      - ./config/promtail.yml:/etc/promtail/config.yml
 
 traefik:
   args:
