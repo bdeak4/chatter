@@ -35,7 +35,8 @@ accessories:
       - ./config/prometheus-web.yml:/etc/prometheus/web.yml
     options:
       user: root
-    port: 9090
+    labels:
+      traefik.http.routers.chatter-backend-prometheus.rule: Host(`prometheus.chatter.exposed`)
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -46,7 +47,6 @@ accessories:
       --path.sysfs=/host/sys \
       --path.rootfs=/rootfs \
       --collector.filesystem.mount-points-exclude="^/(sys|proc|dev|host|etc)($$|/)" \
-      --collector.systemd \
       --collector.processes
     volumes:
       - /proc:/host/proc:ro
@@ -64,7 +64,8 @@ accessories:
       - /var/lib/grafana:/var/lib/grafana
     options:
       user: root
-    port: 3000
+    labels:
+      traefik.http.routers.chatter-backend-grafana.rule: Host(`grafana.chatter.exposed`)
 
   # loki:
   #   image: grafana/loki:latest
