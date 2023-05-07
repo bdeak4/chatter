@@ -26,17 +26,17 @@ accessories:
   prometheus:
     image: prom/prometheus:latest
     cmd: |
-      --config.file=/etc/prometheus/prometheus.yml \
-      --web.config.file=/etc/prometheus/web.yml
+      --config.file=/etc/prometheus/prometheus.yml
     volumes:
       - /var/lib/prometheus:/prometheus
     files:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./config/prometheus-web.yml:/etc/prometheus/web.yml
     options:
       user: root
     labels:
       traefik.http.routers.chatter-backend-prometheus.rule: Host(`prometheus.chatter.exposed`)
+      traefik.http.routers.chatter-backend-prometheus.middlewares: auth
+      traefik.http.routers.chatter-backend-prometheus-metrics.rule: Host(`prometheus.chatter.exposed`) && PathPrefix(`/metrics`)
 
   node-exporter:
     image: prom/node-exporter:latest
