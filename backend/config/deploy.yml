@@ -67,13 +67,28 @@ accessories:
     labels:
       traefik.http.routers.chatter-backend-grafana.rule: Host(`grafana.chatter.exposed`)
 
-  # loki:
-  #   image: grafana/loki:latest
-  #   cmd: |
-  #     -config.file=/etc/loki/config.yaml
-  #   files:
-  #     - ./config/loki.yml:/etc/loki/config.yaml
-  #   port: 3100
+  loki:
+    image: grafana/loki:latest
+    cmd: |
+      -config.file=/etc/loki/config.yaml \
+      -config.expand-env=true
+    env:
+      secret:
+        - LOGS_S3_ENDPOINT
+        - LOGS_S3_BUCKET
+        - LOGS_AWS_ACCESS_KEY_ID
+        - LOGS_AWS_ACCESS_KEY
+        - LOGS_AWS_REGION
+    volumes:
+      - /var/lib/loki:/data/loki
+    files:
+      - ./config/loki.yml:/etc/loki/config.yaml
+    options:
+      user: root
+    labels:
+      traefik.http.routers.chatter-backend-loki.rule: Host(`loki.chatter.exposed`)
+      traefik.http.routers.chatter-backend-loki.middlewares: auth
+      traefik.http.routers.chatter-backend-loki-metrics.rule: Host(`loki.chatter.exposed`) && PathPrefix(`/metrics`)
 
   promtail:
     image: grafana/promtail:latest
@@ -84,7 +99,7 @@ accessories:
       -config.expand-env=true
     env:
       clear:
-        LOKI_HOST: logs-prod-012.grafana.net
+        LOKI_HOST: loki.chatter.exposed
       secret:
         - LOKI_USERNAME
         - LOKI_PASSWORD

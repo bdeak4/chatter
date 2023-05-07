@@ -4,7 +4,18 @@ global:
 scrape_configs:
   - job_name: prometheus
     static_configs:
-      - targets: ["localhost:9090"]
+      - targets:
+          - localhost:9090
+
+  - job_name: grafana
+    static_configs:
+      - targets:
+          - grafana.chatter.exposed
+
+  - job_name: loki
+    static_configs:
+      - targets:
+          - loki.chatter.exposed
 
   - job_name: traefik
     static_configs:

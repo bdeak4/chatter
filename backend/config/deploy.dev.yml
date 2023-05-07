@@ -15,3 +15,6 @@ accessories:
 
   grafana:
     host: 23.88.42.29
+
+  loki:
+    host: 23.88.42.29
