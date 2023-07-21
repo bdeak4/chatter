@@ -1,0 +1,29 @@
+#!/bin/sh
+
+TF_ENV=$1;
+TF_STATE=$2;
+
+if [ -z "$TF_ENV" ] || [ -z "$TF_STATE" ]; then
+  echo "Usage: $0 <environment> <state>"
+  exit 1
+fi
+
+shift 2
+cd -P -- "$(dirname -- "$0")" || exit
+
+if [ ! -d "live/$TF_ENV" ]; then
+  echo "Environment '$TF_ENV' does not exist"
+  exit 1
+fi
+
+if [ ! -d "live/$TF_ENV/$TF_STATE" ]; then
+  echo "State '$TF_STATE' does not exist"
+  exit 1
+fi
+
+if [ "$1" = "init" ]; then
+  terraform -chdir="live/$TF_ENV/$TF_STATE" init \
+    -backend-config="key=$TF_ENV/$TF_STATE$TF_STATE_SUFFIX.tfstate"
+else
+  terraform -chdir="live/$TF_ENV/$TF_STATE" "$@"
+fi
