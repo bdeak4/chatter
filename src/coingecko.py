@@ -6,6 +6,7 @@ import redis
 
 config = json.loads(open("../config.json").read())
 cache = redis.from_url(os.getenv("REDIS_URL"))
+api_key=os.getenv("COINGECKO_API_KEY")
 
 
 def is_on_coingecko(symbol):
@@ -28,7 +29,7 @@ def get_coingecko_coin_data():
 
 
 def _set_coingecko_coin_data():
-    r = requests.get("https://api.coingecko.com/api/v3/search")
+    r = requests.get(f"https://api.coingecko.com/api/v3/search?x_cg_demo_api_key={api_key}")
     if r.ok:
         data = json.dumps(r.json()["coins"])
         cache.set("_coingecko_coin_data", data, ex=hours(6))
@@ -50,7 +51,7 @@ def _set_coingecko_price_data_by_symbol(symbol):
 
     days = 366 if symbol == "BTC" else 32  # btc needs year of price data for chart
     r = requests.get(
-        f"https://api.coingecko.com/api/v3/coins/{coin['id']}/market_chart?vs_currency=usd&days={days}&interval=daily"
+        f"https://api.coingecko.com/api/v3/coins/{coin['id']}/market_chart?vs_currency=usd&days={days}&interval=daily&x_cg_demo_api_key={api_key}"
     )
     if not r.ok:
         print(r.text, flush=True)
@@ -84,7 +85,7 @@ def get_coingecko_trending_data():
 
 
 def _set_coingecko_trending_data():
-    r = requests.get("https://api.coingecko.com/api/v3/search/trending")
+    r = requests.get(f"https://api.coingecko.com/api/v3/search/trending?x_cg_demo_api_key={api_key}")
     if r.ok:
         data = json.dumps(r.json()["coins"])
         cache.set("_coingecko_trending_data", data, ex=hours(2))
