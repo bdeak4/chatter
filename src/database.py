@@ -29,7 +29,6 @@ def migrate():
 
 def get_stats_view(time_increments, time_period):
     return f"""
-        DROP VIEW mention_stats_by_{time_increments};
         CREATE OR REPLACE VIEW mention_stats_by_{time_increments} AS
         SELECT *,
             1.0 * total / LAG(total) OVER (PARTITION BY symbol ORDER BY time_period) * sqrt(total) AS growth

@@ -14,4 +14,4 @@ WORKDIR /app/src
 
 EXPOSE 5000
 
-CMD ["sh", "-c", "[ $FLASK_ENV = 'production' ] && gunicorn -c wsgi.py web:app || flask run"]
+CMD ["gunicorn", "-c", "wsgi.py", "web:app"]
