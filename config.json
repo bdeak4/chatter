@@ -1,0 +1,18 @@
+{
+  "subreddits": ["cryptocurrency"],
+  "symbol_blocklist": [
+    "HODL",
+    "DYOR",
+    "ATH",
+    "SHILL",
+    "NFT",
+    "DEX",
+    "IMO",
+    "WTF",
+    "SCAM",
+    "OG",
+    "A",
+    "X",
+    "OK"
+  ]
+}
