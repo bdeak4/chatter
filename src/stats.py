@@ -122,12 +122,13 @@ def total_mentions(conn, time_period):
 
 
 def total_market_cap_by_time_period():
-    return {
-        "week": list(map(str, total_market_cap("week"))),
-        "month": list(map(str, total_market_cap("month"))),
-        "quarter": list(map(str, total_market_cap("quarter"))),
-        "year": list(map(str, total_market_cap("year"))),
-    }
+    # return {
+    #     "week": list(map(str, total_market_cap("week"))),
+    #     "month": list(map(str, total_market_cap("month"))),
+    #     "quarter": list(map(str, total_market_cap("quarter"))),
+    #     "year": list(map(str, total_market_cap("year"))),
+    # }
+    return {"week": 0, "month": 0, "quarter": 0, "year": 0} # TODO: fix total market cap
 
 
 def total_market_cap(time_period):
