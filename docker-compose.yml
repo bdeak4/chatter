@@ -9,6 +9,7 @@ services:
     build: .
     volumes:
       - .:/app
+    command: flask run
     restart: on-failure
     ports:
       - 5000:5000
