@@ -2,7 +2,7 @@
 
 ...which cryptocurrencies are people talking about today?
 
-[![](https://bdeak.net/img/chatter.png)](https://chatter.bdeak.net)
+[![](https://bdeak.net/img/chatter.png)](https://chatter.exposed/)
 
 ## Setup
 
